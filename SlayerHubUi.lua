@@ -63,7 +63,7 @@ function SlayerUI:MakeWindow(options)
 
 	screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-	function frame:AddParagraph(info)
+	function Window:AddParagraph(info)
 		local titleText = info[1] or "Title"
 		local contentText = info[2] or ""
 
