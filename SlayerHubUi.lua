@@ -62,7 +62,7 @@ function SlayerUI:MakeWindow(options)
 	barra2Corner.Parent = barra2
 
 	screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-	
+
 	function frame:AddParagraph(info)
 		local titleText = info[1] or "Title"
 		local contentText = info[2] or ""
@@ -103,10 +103,8 @@ function SlayerUI:MakeWindow(options)
 		return paragraphFrame
 	end
 
-	return frame
-end
-
 	return frame, barra1, barra2
 end
+
 
 return SlayerUI
