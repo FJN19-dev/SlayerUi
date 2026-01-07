@@ -30,8 +30,8 @@ function SlayerUI:MakeWindow(options)
 	textLabel.BackgroundTransparency = 1
 	textLabel.Text = title
 	textLabel.Font = Enum.Font.GothamBold
-	textLabel.TextSize = 30
-	textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel.TextSize = 18
+	textLabel.TextColor3 = Color3.fromRGB(170, 0, 255)
 	textLabel.TextScaled = false
 	textLabel.Parent = frame
 
@@ -39,7 +39,7 @@ function SlayerUI:MakeWindow(options)
 	barra1.Name = "barra1"
 	barra1.Size = UDim2.new(0, 332, 0, -3)
 	barra1.Position = UDim2.new(0.132, 0, 0.181, 0)
-	barra1.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+	barra1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	barra1.BackgroundTransparency = 0.12
 	barra1.BorderSizePixel = 0
 	barra1.Parent = frame
@@ -52,7 +52,7 @@ function SlayerUI:MakeWindow(options)
 	barra2.Name = "barra2"
 	barra2.Size = UDim2.new(0, 394, 0, 1)
 	barra2.Position = UDim2.new(0.064, 0, 0.778, 0)
-	barra2.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+	barra2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	barra2.BackgroundTransparency = 0.32
 	barra2.BorderSizePixel = 0
 	barra2.Parent = frame
@@ -62,6 +62,49 @@ function SlayerUI:MakeWindow(options)
 	barra2Corner.Parent = barra2
 
 	screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+	
+	function frame:AddParagraph(info)
+		local titleText = info[1] or "Title"
+		local contentText = info[2] or ""
+
+		-- Frame do parágrafo
+		local paragraphFrame = Instance.new("Frame")
+		paragraphFrame.Size = UDim2.new(1, -20, 0, 80)
+		paragraphFrame.Position = UDim2.new(0, 10, 0, (#frame:GetChildren() * 85)) -- Empilha automaticamente
+		paragraphFrame.BackgroundTransparency = 1
+		paragraphFrame.Parent = frame
+
+		-- Título do parágrafo
+		local titleLabel = Instance.new("TextLabel")
+		titleLabel.Size = UDim2.new(1, 0, 0, 25)
+		titleLabel.Position = UDim2.new(0, 0, 0, 0)
+		titleLabel.BackgroundTransparency = 1
+		titleLabel.Text = titleText
+		titleLabel.Font = Enum.Font.GothamBold
+		titleLabel.TextSize = 20
+		titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+		titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+		titleLabel.Parent = paragraphFrame
+
+		-- Conteúdo do parágrafo
+		local contentLabel = Instance.new("TextLabel")
+		contentLabel.Size = UDim2.new(1, 0, 0, 50)
+		contentLabel.Position = UDim2.new(0, 0, 0, 25)
+		contentLabel.BackgroundTransparency = 1
+		contentLabel.Text = contentText
+		contentLabel.TextWrapped = true
+		contentLabel.TextXAlignment = Enum.TextXAlignment.Left
+		contentLabel.TextYAlignment = Enum.TextYAlignment.Top
+		contentLabel.Font = Enum.Font.Gotham
+		contentLabel.TextSize = 18
+		contentLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+		contentLabel.Parent = paragraphFrame
+
+		return paragraphFrame
+	end
+
+	return frame
+end
 
 	return frame, barra1, barra2
 end
