@@ -1,58 +1,30 @@
--- SlayerHubUi.lua
--- Lib para trabalhar com GUI existente no StarterGui
+-- SlayerUI.lua
+-- Slayer UI minimalista
+-- Apenas ScreenGui e Frame com transparência e cantos arredondados
 
-local SlayerHubUi = {}
+local SlayerUI = {}
 
--- Função para inicializar a GUI existente
--- frame: Frame principal da sua GUI no StarterGui
--- tituloName: nome do TextLabel que será usado como título
-function SlayerHubUi:Init(frame, tituloName)
-	if not frame then return end
+-- Função para criar uma janela básica
+function SlayerUI:CreateWindow(title)
+	local screenGui = Instance.new("ScreenGui")
+	screenGui.Name = title .. "_GUI"
 
-	-- Pega o jogador e garante que a GUI está no PlayerGui
-	local player = game.Players.LocalPlayer
-	if not player then return end
+	local frame = Instance.new("Frame")
+	frame.Size = UDim2.new(0, 453, 0, 269)         -- Tamanho definido
+	frame.Position = UDim2.new(0.293, 0, 0.228, 0) -- Posição definida
+	frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+	frame.BackgroundTransparency = 0.27            -- Transparência
+	frame.BorderSizePixel = 0
+	frame.Parent = screenGui
 
-	frame.Parent = player:WaitForChild("PlayerGui") -- garante que está ativo
+	-- Adicionando cantos arredondados
+	local uicorner = Instance.new("UICorner")
+	uicorner.CornerRadius = UDim.new(0, 4)        -- Cantos arredondados
+	uicorner.Parent = frame
 
-	-- Pega o título se existir
-	local titulo
-	if tituloName then
-		titulo = frame:FindFirstChild(tituloName)
-		if titulo then
-			titulo.Text = tituloName -- pode setar texto padrão
-		end
-	end
+	screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-	return frame, titulo
+	return frame
 end
 
--- Função para alterar o título depois
-function SlayerHubUi:SetTitle(titulo, texto)
-	if titulo then
-		titulo.Text = texto
-	end
-end
-
--- Função para adicionar botão dinamicamente
--- frame: Frame onde o botão será adicionado
--- texto: texto do botão
--- callback: função chamada ao clicar
-function SlayerHubUi:AddButton(frame, texto, callback)
-	if not frame then return end
-
-	local button = Instance.new("TextButton")
-	button.Size = UDim2.fromScale(0.8, 0.15)
-	button.Position = UDim2.fromScale(0.1, 0.3 + (#frame:GetChildren()-1)*0.18)
-	button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-	button.TextColor3 = Color3.fromRGB(255, 255, 255)
-	button.Text = texto or "Botão"
-	button.TextScaled = true
-	button.Parent = frame
-
-	if callback then
-		button.MouseButton1Click:Connect(callback)
-	end
-end
-
-return SlayerHubUi
+return SlayerUI
