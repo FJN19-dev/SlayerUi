@@ -1,119 +1,130 @@
-local SlayerUI = {}
+--[=[
+ d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
+88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
+88      88    88    88            odD'      88      88    88 88ooo88 
+88  ooo 88    88    88          .88'        88      88    88 88~~~88 
+88. ~8~ 88b  d88   .88.        j88.         88booo. 88b  d88 88   88    @uniquadev
+ Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
+]=]
 
-function SlayerUI:MakeWindow(options)
-	options = options or {}
-	local title = options.Title or "Slayer UI"
+-- Instances: 10 | Scripts: 0 | Modules: 0 | Tags: 0
+local G2L = {};
 
-	local screenGui = Instance.new("ScreenGui")
-	screenGui.Name = title .. "_GUI"
+-- StarterGui.Slayer Hub
+G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
+G2L["1"]["Name"] = [[Slayer Hub]];
+G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
 
-	local frame = Instance.new("Frame")
-	frame.Size = UDim2.new(0, 453, 0, 269)
-	frame.Position = UDim2.new(0.322, 0, 0.228, 0)
-	frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-	frame.BackgroundTransparency = 0.27
-	frame.BorderSizePixel = 0
-	frame.Parent = screenGui
 
-	local frameCorner = Instance.new("UICorner")
-	frameCorner.CornerRadius = UDim.new(0, 4)
-	frameCorner.Parent = frame
+-- StarterGui.Slayer Hub.Window
+G2L["2"] = Instance.new("Frame", G2L["1"]);
+G2L["2"]["BorderSizePixel"] = 0;
+G2L["2"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["2"]["Size"] = UDim2.new(0, 624, 0, 355);
+G2L["2"]["Position"] = UDim2.new(0.27781, 0, 0.14163, 0);
+G2L["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["2"]["Name"] = [[Window]];
+G2L["2"]["BackgroundTransparency"] = 0.17;
 
-	local frameStroke = Instance.new("UIStroke")
-	frameStroke.Thickness = 3
-	frameStroke.Color = Color3.fromRGB(170, 0, 255)
-	frameStroke.Parent = frame
 
-	local textLabel = Instance.new("TextLabel")
-	textLabel.Size = UDim2.new(0, 356, 0, 61)
-	textLabel.Position = UDim2.new(0.13, 0, 0, 0)
-	textLabel.BackgroundTransparency = 1
-	textLabel.Text = title
-	textLabel.Font = Enum.Font.GothamBold
-	textLabel.TextSize = 18
-	textLabel.TextColor3 = Color3.fromRGB(170, 0, 255)
-	textLabel.TextScaled = false
-	textLabel.Parent = frame
+-- StarterGui.Slayer Hub.Window.UICorner
+G2L["3"] = Instance.new("UICorner", G2L["2"]);
+G2L["3"]["CornerRadius"] = UDim.new(0, 6);
 
-	local barra1 = Instance.new("Frame")
-	barra1.Name = "barra1"
-	barra1.Size = UDim2.new(0, 332, 0, -3)
-	barra1.Position = UDim2.new(0.132, 0, 0.181, 0)
-	barra1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	barra1.BackgroundTransparency = 0.12
-	barra1.BorderSizePixel = 0
-	barra1.Parent = frame
 
-	local barra1Corner = Instance.new("UICorner")
-	barra1Corner.CornerRadius = UDim.new(0, 8)
-	barra1Corner.Parent = barra1
+-- StarterGui.Slayer Hub.Window.Imagem
+G2L["4"] = Instance.new("ImageLabel", G2L["2"]);
+G2L["4"]["BorderSizePixel"] = 0;
+G2L["4"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["4"]["Image"] = [[rbxassetid://92239031837543]];
+G2L["4"]["Size"] = UDim2.new(0, 459, 0, 262);
+G2L["4"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["4"]["BackgroundTransparency"] = 1;
+G2L["4"]["Name"] = [[Imagem]];
+G2L["4"]["Position"] = UDim2.new(0.26442, 0, 0.26197, 0);
 
-	local barra2 = Instance.new("Frame")
-	barra2.Name = "barra2"
-	barra2.Size = UDim2.new(0, 394, 0, 1)
-	barra2.Position = UDim2.new(0.064, 0, 0.778, 0)
-	barra2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	barra2.BackgroundTransparency = 0.32
-	barra2.BorderSizePixel = 0
-	barra2.Parent = frame
 
-	local barra2Corner = Instance.new("UICorner")
-	barra2Corner.CornerRadius = UDim.new(0, 8)
-	barra2Corner.Parent = barra2
+-- StarterGui.Slayer Hub.Window.Frame
+G2L["5"] = Instance.new("Frame", G2L["2"]);
+G2L["5"]["BorderSizePixel"] = 0;
+G2L["5"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["5"]["Size"] = UDim2.new(0, 624, 0, 2);
+G2L["5"]["Position"] = UDim2.new(0, 0, 0.10704, 0);
+G2L["5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["5"]["BackgroundTransparency"] = 0.19;
 
-	screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-    local content = Instance.new("Frame")
-content.Name = "Content"
-content.Size = UDim2.new(1, -20, 1, -90)
-content.Position = UDim2.new(0, 10, 0, 70)
-content.BackgroundTransparency = 1
-content.Parent = frame
+-- StarterGui.Slayer Hub.Window.Title
+G2L["6"] = Instance.new("TextLabel", G2L["2"]);
+G2L["6"]["TextStrokeTransparency"] = 100;
+G2L["6"]["TextTruncate"] = Enum.TextTruncate.AtEnd;
+G2L["6"]["BorderSizePixel"] = 0;
+G2L["6"]["TextSize"] = 17;
+G2L["6"]["TextStrokeColor3"] = Color3.fromRGB(171, 0, 255);
+G2L["6"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["6"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
+G2L["6"]["TextColor3"] = Color3.fromRGB(171, 0, 255);
+G2L["6"]["BackgroundTransparency"] = 1;
+G2L["6"]["OpenTypeFeatures"] = [[Slayer Hub X]];
+G2L["6"]["Size"] = UDim2.new(0, 172, 0, 50);
+G2L["6"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["6"]["Text"] = [[Slayer Hub X]];
+G2L["6"]["Name"] = [[Title]];
+G2L["6"]["Position"] = UDim2.new(-0.02404, 0, 0, 0);
 
-local layout = Instance.new("UIListLayout")
-layout.Padding = UDim.new(0, 10)
-layout.Parent = content
 
-	function frame:AddParagraph(info)
-		local titleText = info[1] or "Title"
-		local contentText = info[2] or ""
+-- StarterGui.Slayer Hub.Window.Folder
+G2L["7"] = Instance.new("TextLabel", G2L["2"]);
+G2L["7"]["BorderSizePixel"] = 0;
+G2L["7"]["TextSize"] = 17;
+G2L["7"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["7"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["7"]["TextColor3"] = Color3.fromRGB(171, 0, 255);
+G2L["7"]["BackgroundTransparency"] = 1;
+G2L["7"]["Size"] = UDim2.new(0, 348, 0, 38);
+G2L["7"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["7"]["Text"] = [[[v1.1.1] [discord.gg/NJJ7BYgWcd]]];
+G2L["7"]["Name"] = [[Folder]];
+G2L["7"]["Position"] = UDim2.new(0.07051, 0, 0.0169, 0);
 
-		local paragraphFrame = Instance.new("Frame")
-		paragraphFrame.Size = UDim2.new(1, 0, 0, 80)
-		paragraphFrame.BackgroundTransparency = 1
-		paragraphFrame.Parent = content
 
-		local titleLabel = Instance.new("TextLabel")
-		titleLabel.Size = UDim2.new(1, 0, 0, 22)
-		titleLabel.BackgroundTransparency = 1
-		titleLabel.Text = titleText
-		titleLabel.Font = Enum.Font.GothamBold
-		titleLabel.TextSize = 18
-		titleLabel.TextColor3 = Color3.fromRGB(170, 0, 255)
-		titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-		titleLabel.Parent = paragraphFrame
+-- StarterGui.Slayer Hub.Window.Fechar
+G2L["8"] = Instance.new("TextButton", G2L["2"]);
+G2L["8"]["BorderSizePixel"] = 0;
+G2L["8"]["TextTransparency"] = 0.25;
+G2L["8"]["TextSize"] = 20;
+G2L["8"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["8"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["8"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["8"]["BackgroundTransparency"] = 1;
+G2L["8"]["Size"] = UDim2.new(0, 200, 0, 50);
+G2L["8"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["8"]["Text"] = [[X]];
+G2L["8"]["Name"] = [[Fechar]];
+G2L["8"]["Position"] = UDim2.new(0.80929, 0, -0.0169, 0);
 
-		local contentLabel = Instance.new("TextLabel")
-		contentLabel.Size = UDim2.new(1, 0, 0, 55)
-		contentLabel.Position = UDim2.new(0, 0, 0, 22)
-		contentLabel.BackgroundTransparency = 1
-		contentLabel.TextWrapped = true
-		contentLabel.TextYAlignment = Enum.TextYAlignment.Top
-		contentLabel.TextXAlignment = Enum.TextXAlignment.Left
-		contentLabel.Font = Enum.Font.Gotham
-		contentLabel.TextSize = 16
-		contentLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-		contentLabel.Text = contentText
-		contentLabel.Parent = paragraphFrame
 
-		return paragraphFrame
-	end
+-- StarterGui.Slayer Hub.Window.ImageButton
+G2L["9"] = Instance.new("ImageButton", G2L["2"]);
+G2L["9"]["BorderSizePixel"] = 0;
+G2L["9"]["BackgroundTransparency"] = 1;
+G2L["9"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["9"]["Image"] = [[rbxassetid://9886659276]];
+G2L["9"]["Size"] = UDim2.new(0, 29, 0, 46);
+G2L["9"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["9"]["Position"] = UDim2.new(0.86538, 0, 0, 0);
 
-	screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-	return frame
-end
+-- StarterGui.Slayer Hub.Window.Close
+G2L["a"] = Instance.new("Frame", G2L["2"]);
+G2L["a"]["Visible"] = false;
+G2L["a"]["BorderSizePixel"] = 0;
+G2L["a"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["a"]["Size"] = UDim2.new(0, 233, 0, 134);
+G2L["a"]["Position"] = UDim2.new(0.35417, 0, 0.30986, 0);
+G2L["a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["a"]["Name"] = [[Close]];
 
-return SlayerUI
 
-    
+
+return G2L["1"], require;
