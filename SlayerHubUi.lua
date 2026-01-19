@@ -1,13 +1,4 @@
---[=[
- d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
-88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
-88      88    88    88            odD'      88      88    88 88ooo88 
-88  ooo 88    88    88          .88'        88      88    88 88~~~88 
-88. ~8~ 88b  d88   .88.        j88.         88booo. 88b  d88 88   88    @uniquadev
- Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
-]=]
 
--- Instances: 24 | Scripts: 5 | Modules: 1 | Tags: 0
 local G2L = {};
 
 -- StarterGui.Slayer Hub
@@ -272,8 +263,10 @@ function Library:CreateWindow(options)
 
 	local Player = game.Players.LocalPlayer
 	local PlayerGui = Player:WaitForChild("PlayerGui")
-	local ScreenGui = PlayerGui:WaitForChild("Slayer Hub")
-	local Window = ScreenGui:WaitForChild("Window")
+	local ScreenGui = G2L["1"]
+    local Window = G2L["2"]
+    local SideBar = G2L["16"]
+    local Container = Window:FindFirstChild("Container") or Instance.new("Frame", Window)
 
 	-- Atualiza o Título e subtítulo
 	local TitleLabel = Window:FindFirstChild("Title")
@@ -402,9 +395,6 @@ function Library:CreateWindow(options)
 			TabButton.TextColor3 = Color3.new(1, 1, 1)
 		end
 
-		---------------------------------------------------------
-		-- INÍCIO DO SISTEMA DE ELEMENTOS (TOGGLE)
-		---------------------------------------------------------
 		---------------------------------------------------------
 		-- INÍCIO DO SISTEMA DE ELEMENTOS (TOGGLE)
 		---------------------------------------------------------
