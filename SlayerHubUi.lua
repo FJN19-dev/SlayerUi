@@ -586,4 +586,8 @@ local script = G2L["15"];
 end;
 task.spawn(C_15);
 
-return G2L["1"], require;
+-- Pega a ModuleScript da Library que está dentro da estrutura G2L
+local LibraryModule = G2L["18"] 
+-- Executa o conteúdo da ModuleScript para retornar a tabela Library
+local Library = require(LibraryModule) 
+return Library
