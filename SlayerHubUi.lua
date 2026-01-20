@@ -1,14 +1,11 @@
--[[
-    Slayer Hub X - Fix Version
-]]
 
-local G2L = {}
+local G2L = {};
 
--- Criando a ScreenGui principal
-G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
-G2L["1"]["Name"] = [[Slayer Hub]]
-G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling
-G2L["1"]["ResetOnSpawn"] = false
+-- StarterGui.Slayer Hub
+G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
+G2L["1"]["Name"] = [[Slayer Hub]];
+G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
+
 
 -- StarterGui.Slayer Hub.Library
 G2L["2"] = Instance.new("ModuleScript", G2L["1"]);
@@ -274,14 +271,17 @@ G2L["1c"]["Name"] = [[Bolinha]];
 G2L["1c"]["Position"] = UDim2.new(0.04658, 0, 0.12298, 0);
 
 
+-- StarterGui.Slayer Hub.Bolinha.LocalScript
 G2L["1d"] = Instance.new("LocalScript", G2L["1c"]);
 
 
 
+-- StarterGui.Slayer Hub.Bolinha.UICorner
 G2L["1e"] = Instance.new("UICorner", G2L["1c"]);
 G2L["1e"]["CornerRadius"] = UDim.new(0, 90);
 
 
+-- Require G2L wrapper
 local G2L_REQUIRE = require;
 local G2L_MODULES = {};
 local function require(Module:ModuleScript)
@@ -298,9 +298,12 @@ end
 
 G2L_MODULES[G2L["2"]] = {
 Closure = function()
-    local script = G2L["2"];
-    local Library = {Objects = {},}
-	local Lucide = {
+    local script = G2L["2"];local Library = {Objects = {},}
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+
+-- 1. TABELA DE ÍCONES (LUCIDE)
+local Lucide = {
 	["lucide-accessibility"] = "rbxassetid://10709751939",
 	["lucide-activity"] = "rbxassetid://10709752035",
 	["lucide-air-vent"] = "rbxassetid://10709752131",
@@ -1120,8 +1123,6 @@ Closure = function()
 	["lucide-zoom-in"] = "rbxassetid://10747384552",
 	["lucide-zoom-out"] = "rbxassetid://10747384679",
 }
-local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
 
 -- Configurações de Cores
 local Color_Theme = Color3.fromRGB(120, 0, 200) 
@@ -1135,6 +1136,7 @@ Notifications.Position = UDim2.new(1, -310, 0, 20)
 Notifications.BackgroundTransparency = 1
 Notifications.ZIndex = 1000
 
+-- Isso garante que as notificações fiquem dentro da sua GUI principal
 task.spawn(function()
 	local Player = game.Players.LocalPlayer
 	local PlayerGui = Player:WaitForChild("PlayerGui")
@@ -1245,10 +1247,12 @@ function Library:CreateWindow(options)
 	local Window = ScreenGui:WaitForChild("Window")
 	local Bolinha = ScreenGui:FindFirstChild("Bolinha")
 
+	-- Define o ícone da Bolinha
 	if Bolinha and (Bolinha:IsA("ImageLabel") or Bolinha:IsA("ImageButton")) then
 		Bolinha.Image = "rbxassetid://" .. string.gsub(tostring(BolinhaIcon), "rbxassetid://", "")
 	end
 
+	-- Atualiza o Título e subtítulo
 	local TitleLabel = Window:FindFirstChild("Title")
 	if TitleLabel and TitleLabel:IsA("TextLabel") then TitleLabel.Text = TitleText end
 
@@ -1258,6 +1262,7 @@ function Library:CreateWindow(options)
 	local WindowCorner = Instance.new("UICorner", Window)
 	WindowCorner.CornerRadius = UDim.new(0, 8)
 
+	-- SISTEMA DE ARRASTE DA WINDOW (Independente da Bolinha)
 	local function MakeDraggable(gui)
 		local dragging, dragInput, dragStart, startPos
 		gui.InputBegan:Connect(function(input)
@@ -1283,14 +1288,16 @@ function Library:CreateWindow(options)
 		end)
 	end
 
-	MakeDraggable(Window) 
+	MakeDraggable(Window) -- Ativa o arraste na Janela principal
 
+	-- 1. BASE DA SIDEBAR
 	local SideBar = Window:FindFirstChild("SideBar") or Instance.new("Frame", Window)
 	SideBar.Name = "SideBar"
 	SideBar.Size = UDim2.new(0, 165,0, 316)
 	SideBar.BackgroundColor3 = Color_Background
 	SideBar.BorderSizePixel = 0
 
+	-- 2. SCROLLING FRAME
 	local TabScroll = SideBar:FindFirstChild("TabScroll") or Instance.new("ScrollingFrame", SideBar)
 	TabScroll.Name = "TabScroll"
 	TabScroll.Size = UDim2.new(1, 0, 1, -60)
@@ -1308,6 +1315,7 @@ function Library:CreateWindow(options)
 	local UIPadding = TabScroll:FindFirstChild("UIPadding") or Instance.new("UIPadding", TabScroll)
 	UIPadding.PaddingTop = UDim.new(0, 10)
 
+	-- 3. PERFIL DO USUÁRIO
 	local UserProfile = SideBar:FindFirstChild("PerfilFrame") or Instance.new("CanvasGroup", SideBar)
 	UserProfile.Name = "PerfilFrame"
 	UserProfile:ClearAllChildren()
@@ -1347,8 +1355,8 @@ function Library:CreateWindow(options)
 
 	local Container = Window:FindFirstChild("Container") or Instance.new("Frame", Window)
 	Container.Name = "Container"
-	Container.Size = UDim2.new(1, -175, 1, -65) 
-	Container.Position = UDim2.new(0, 170, 0, 55) 
+	Container.Size = UDim2.new(1, -175, 1, -65) -- Dá um respiro nas bordas
+	Container.Position = UDim2.new(0, 170, 0, 55) -- Começa depois da sidebar e abaixo do título
 	Container.BackgroundTransparency = 1
 
 	local Tabs = {FirstTab = nil}
@@ -1359,21 +1367,24 @@ function Library:CreateWindow(options)
 
 		local TabButton = Instance.new("TextButton", TabScroll)
 		TabButton.Size = UDim2.new(0, 140, 0, 35)
-		TabButton.Text = "" 
+		TabButton.Text = "" -- Deixamos o texto vazio para usar um Label customizado
 		TabButton.BackgroundColor3 = Color_Inactive
 		TabButton.AutoButtonColor = false
 		Instance.new("UICorner", TabButton).CornerRadius = UDim.new(0, 6)
 
+		-- Container do conteúdo do botão (Ícone + Texto)
 		local ButtonContent = Instance.new("Frame", TabButton)
 		ButtonContent.Size = UDim2.new(1, 0, 1, 0)
 		ButtonContent.BackgroundTransparency = 1
 
+		-- Ícone (Opcional)
 		local TabIcon = Instance.new("ImageLabel", ButtonContent)
 		TabIcon.Size = UDim2.fromOffset(18, 18)
 		TabIcon.Position = UDim2.new(0, 10, 0.5, -9)
 		TabIcon.BackgroundTransparency = 1
 		TabIcon.ImageColor3 = Color3.fromRGB(200, 200, 200)
 
+		-- Verifica se o ícone existe na tabela Lucide ou se é um rbxassetid direto
 		if IconID ~= "" then
 			TabIcon.Image = Lucide[IconID] or IconID
 			TabIcon.Visible = true
@@ -1381,13 +1392,14 @@ function Library:CreateWindow(options)
 			TabIcon.Visible = false
 		end
 
+		-- Texto da Aba
 		local TabLabel = Instance.new("TextLabel", ButtonContent)
 		TabLabel.Text = tabConfig.Title
 		TabLabel.Font = Enum.Font.GothamBold
 		TabLabel.TextSize = 13
 		TabLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 		TabLabel.BackgroundTransparency = 1
-
+		-- Se tiver ícone, empurra o texto para o lado. Se não, centraliza.
 		TabLabel.Size = TabIcon.Visible and UDim2.new(1, -35, 1, 0) or UDim2.new(1, 0, 1, 0)
 		TabLabel.Position = TabIcon.Visible and UDim2.new(0, 35, 0, 0) or UDim2.new(0, 0, 0, 0)
 		TabLabel.TextXAlignment = TabIcon.Visible and Enum.TextXAlignment.Left or Enum.TextXAlignment.Center
@@ -1407,7 +1419,7 @@ function Library:CreateWindow(options)
 		PageLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 		PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-		
+		-- Evento de Clique
 		TabButton.MouseButton1Click:Connect(function()
 			for _, child in pairs(Container:GetChildren()) do
 				if child:IsA("ScrollingFrame") then child.Visible = false end
@@ -1439,7 +1451,7 @@ function Library:CreateWindow(options)
 
 		local Elements = {}
 
-		
+		-- === FUNÇÃO: ADD BUTTON ===
 		function Elements:AddButton(buttonConfig)
 			Index = Index + 1
 			local Button = { Callback = buttonConfig.Callback or function() end }
@@ -1450,7 +1462,7 @@ function Library:CreateWindow(options)
 			ButtonFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 			ButtonFrame.Text = ""
 			ButtonFrame.AutoButtonColor = false
-			ButtonFrame.LayoutOrder = Index 
+			ButtonFrame.LayoutOrder = Index -- Ordem definida pelo script
 			Instance.new("UICorner", ButtonFrame).CornerRadius = UDim.new(0, 8)
 
 			local B_Title = Instance.new("TextLabel", ButtonFrame)
@@ -1489,7 +1501,7 @@ function Library:CreateWindow(options)
 			return Button
 		end
 
-		
+		-- === FUNÇÃO: ADD TOGGLE ===
 		function Elements:AddToggle(toggleConfig)
 			Index = Index + 1
 			local Toggle = { Value = toggleConfig.Default or false, Callback = function() end }
@@ -1500,7 +1512,7 @@ function Library:CreateWindow(options)
 			ToggleFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 			ToggleFrame.Text = ""
 			ToggleFrame.AutoButtonColor = false
-			ToggleFrame.LayoutOrder = Index 
+			ToggleFrame.LayoutOrder = Index -- Ordem definida pelo script
 			Instance.new("UICorner", ToggleFrame).CornerRadius = UDim.new(0, 8)
 
 			local T_Title = Instance.new("TextLabel", ToggleFrame)
@@ -1548,7 +1560,7 @@ function Library:CreateWindow(options)
 			return Toggle
 		end
 
-		
+		-- === FUNÇÃO: ADD DROPDOWN (MELHORADO) ===
 		function Elements:AddDropdown(name, dropConfig)
 			Index = Index + 1
 			local Dropdown = {
@@ -1593,7 +1605,7 @@ function Library:CreateWindow(options)
 			D_DescLabel.TextXAlignment = Enum.TextXAlignment.Left
 			D_DescLabel.BackgroundTransparency = 1
 
-			
+			-- Novo Ícone solicitado
 			local DropdownIco = Instance.new("ImageLabel", DropButton)
 			DropdownIco.Image = "rbxassetid://10709790948"
 			DropdownIco.Size = UDim2.fromOffset(16, 16)
@@ -1636,7 +1648,7 @@ function Library:CreateWindow(options)
 				OptBtn.AutoButtonColor = false
 				Instance.new("UICorner", OptBtn).CornerRadius = UDim.new(0, 6)
 
-				
+				-- Barra lateral de seleção (Efeito visual do código enviado)
 				local Selector = Instance.new("Frame", OptBtn)
 				Selector.Size = UDim2.fromOffset(4, 0)
 				Selector.Position = UDim2.new(0, 2, 0.5, 0)
@@ -1696,7 +1708,7 @@ function Library:CreateWindow(options)
 
 				if Dropdown.Opened then OptionHolder.Visible = true end
 
-				
+				-- Animação Suave "Quart" para o Frame e Rotação
 				TweenService:Create(DropdownFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = targetSize}):Play()
 				TweenService:Create(DropdownIco, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Rotation = Dropdown.Opened and 180 or 0}):Play()
 
@@ -1710,15 +1722,15 @@ function Library:CreateWindow(options)
 			return Dropdown
 		end
 
-		
+		-- === FUNÇÃO: ADD PARAGRAPH ===
 		function Elements:AddParagraph(parConfig)
 			Index = Index + 1
 
 			local ParagraphFrame = Instance.new("Frame", Page)
 			ParagraphFrame.Name = "Paragraph_" .. Index
-			ParagraphFrame.Size = UDim2.new(1, -20, 0, 0) 
+			ParagraphFrame.Size = UDim2.new(1, -20, 0, 0) -- Começa com altura 0
 			ParagraphFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-			ParagraphFrame.AutomaticSize = Enum.AutomaticSize.Y 
+			ParagraphFrame.AutomaticSize = Enum.AutomaticSize.Y -- Ajusta a altura conforme o texto
 			ParagraphFrame.LayoutOrder = Index
 
 			local P_Corner = Instance.new("UICorner", ParagraphFrame)
@@ -1748,15 +1760,17 @@ function Library:CreateWindow(options)
 			P_Content.TextXAlignment = Enum.TextXAlignment.Left
 			P_Content.TextYAlignment = Enum.TextYAlignment.Top
 			P_Content.BackgroundTransparency = 1
-			P_Content.TextWrapped = true 
-			P_Content.AutomaticSize = Enum.AutomaticSize.Y 
+			P_Content.TextWrapped = true -- Permite quebra de linha
+			P_Content.AutomaticSize = Enum.AutomaticSize.Y -- Faz o label crescer com o conteúdo
+
+			-- Adiciona um espaço (padding) no fundo para não ficar colado
 			local Padding = Instance.new("UIPadding", ParagraphFrame)
 			Padding.PaddingBottom = UDim.new(0, 10)
 			Padding.PaddingTop = UDim.new(0, 0)
 
 			return ParagraphFrame
 		end
-
+		-- === FUNÇÃO: ADD SECTION ===
 		function Elements:AddSection(name)
 			Index = Index + 1
 
@@ -1770,13 +1784,13 @@ function Library:CreateWindow(options)
 			SectionTitle.Text = tostring(name)
 			SectionTitle.Size = UDim2.new(1, -10, 1, 0)
 			SectionTitle.Position = UDim2.fromOffset(5, 5)
-			SectionTitle.TextColor3 = Color_Theme 
+			SectionTitle.TextColor3 = Color_Theme -- Usa a cor roxa do seu tema
 			SectionTitle.Font = Enum.Font.GothamBold
 			SectionTitle.TextSize = 12
 			SectionTitle.TextXAlignment = Enum.TextXAlignment.Left
 			SectionTitle.BackgroundTransparency = 1
 
-
+			-- Linha decorativa ao lado do texto
 			local Line = Instance.new("Frame", SectionFrame)
 			Line.Size = UDim2.new(1, - (SectionTitle.TextBounds.X + 20), 0, 1)
 			Line.Position = UDim2.new(0, SectionTitle.TextBounds.X + 15, 0.5, 4)
@@ -1784,6 +1798,7 @@ function Library:CreateWindow(options)
 			Line.BackgroundTransparency = 0.7
 			Line.BorderSizePixel = 0
 
+			-- Se o texto mudar, a linha se ajusta
 			SectionTitle:GetPropertyChangedSignal("TextBounds"):Connect(function()
 				Line.Size = UDim2.new(1, - (SectionTitle.TextBounds.X + 20), 0, 1)
 				Line.Position = UDim2.new(0, SectionTitle.TextBounds.X + 15, 0.5, 4)
@@ -1791,10 +1806,11 @@ function Library:CreateWindow(options)
 
 			return SectionFrame
 		end
-
+		-- === FUNÇÃO: ADD SLIDER (ATUALIZADA) ===
 		function Elements:AddSlider(sliderConfig)
 			Index = Index + 1
 
+			-- Configurações e Variáveis de Controle
 			local Name = sliderConfig.Name or "Slider"
 			local Min = sliderConfig.Min or 0
 			local Max = sliderConfig.Max or 100
@@ -1806,6 +1822,7 @@ function Library:CreateWindow(options)
 				Callback = sliderConfig.Callback or function() end
 			}
 
+			-- Frame Principal
 			local SliderFrame = Instance.new("Frame", Page)
 			SliderFrame.Name = Name .. "_Slider"
 			SliderFrame.Size = UDim2.new(1, -20, 0, 50)
@@ -1833,6 +1850,7 @@ function Library:CreateWindow(options)
 			S_ValueText.BackgroundTransparency = 1
 			S_ValueText.TextXAlignment = Enum.TextXAlignment.Right
 
+			-- Barra de Fundo
 			local SliderBar = Instance.new("Frame", SliderFrame)
 			SliderBar.Size = UDim2.new(1, -30, 0, 4)
 			SliderBar.Position = UDim2.new(0, 15, 0, 35)
@@ -1840,11 +1858,13 @@ function Library:CreateWindow(options)
 			SliderBar.BorderSizePixel = 0
 			Instance.new("UICorner", SliderBar)
 
+			-- Barra de Preenchimento
 			local SliderFill = Instance.new("Frame", SliderBar)
 			SliderFill.BackgroundColor3 = Color_Theme
 			SliderFill.BorderSizePixel = 0
 			Instance.new("UICorner", SliderFill)
 
+			-- Círculo (Handle)
 			local SliderInner = Instance.new("Frame", SliderFill)
 			SliderInner.Size = UDim2.fromOffset(12, 12)
 			SliderInner.Position = UDim2.new(1, 0, 0.5, 0)
@@ -1852,6 +1872,7 @@ function Library:CreateWindow(options)
 			SliderInner.BackgroundColor3 = Color3.new(1, 1, 1)
 			Instance.new("UICorner", SliderInner).CornerRadius = UDim.new(1, 0)
 
+			-- Função para Atualizar Visual e Valor
 			local function SetValue(v)
 				local snapped = math.floor(v / Increase + 0.5) * Increase
 				Slider.Value = math.clamp(snapped, Min, Max)
@@ -1859,6 +1880,7 @@ function Library:CreateWindow(options)
 				local percent = (Slider.Value - Min) / (Max - Min)
 				S_ValueText.Text = tostring(Slider.Value)
 
+				-- Animação Suave
 				TweenService:Create(SliderFill, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
 					Size = UDim2.fromScale(percent, 1)
 				}):Play()
@@ -1866,6 +1888,7 @@ function Library:CreateWindow(options)
 				task.spawn(Slider.Callback, Slider.Value)
 			end
 
+			-- Lógica de Input (Mouse/Touch)
 			local Dragging = false
 
 			local function UpdateFromMouse()
@@ -1896,10 +1919,12 @@ function Library:CreateWindow(options)
 				end
 			end)
 
+			-- Permitir mudar o valor via script: Slider:SetValue(10)
 			function Slider:SetValue(v)
 				SetValue(v)
 			end
 
+			-- Inicia no valor Padrão
 			SetValue(Default)
 
 			return Slider
@@ -1960,12 +1985,13 @@ task.spawn(C_4);
 local function C_b()
 local script = G2L["b"];
 	local fecharBotao = script.Parent
-	local Window = fecharBotao.Parent 
+	local Window = fecharBotao.Parent -- A Janela principal
 	local frameClose = Window:WaitForChild("Close") 
 	
 	fecharBotao.MouseButton1Click:Connect(function()
+		-- Torna o frame de confirmação visível
 		frameClose.Visible = true
-		frameClose.ZIndex = 20 
+		frameClose.ZIndex = 20 -- Garante que fique na frente das funções
 	
 	
 	end)
@@ -1975,10 +2001,10 @@ task.spawn(C_b);
 local function C_d()
 local script = G2L["d"];
 	local botao = script.Parent
-	local window = botao.Parent 
+	local window = botao.Parent -- Referencia a Window que é o "pai" do botão
 	
 	botao.MouseButton1Click:Connect(function()
-		window.Visible = not window.Visible 
+		window.Visible = not window.Visible -- Isso faz um "toggle": se estiver visível some, se estiver invisível volta
 	end)
 end;
 task.spawn(C_d);
@@ -1992,10 +2018,10 @@ task.spawn(C_f);
 local function C_12()
 local script = G2L["12"];
 	local Button = script.Parent
-	local Window = Button.Parent.Parent 
+	local Window = Button.Parent.Parent -- Sobe dois níveis para achar a 'Window'
 	
 	Button.MouseButton1Click:Connect(function()
-		Window:Destroy()
+		Window:Destroy() -- Deleta a UI inteira
 	end)
 end;
 task.spawn(C_12);
@@ -2003,24 +2029,28 @@ task.spawn(C_12);
 local function C_16()
 local script = G2L["16"];
 	local Button = script.Parent
-	local CloseFrame = Button.Parent
-	local Window = CloseFrame.Parent 
-	local SideBar = Window:WaitForChild("SideBar") 
+	local CloseFrame = Button.Parent -- Frame 'Close'
+	local Window = CloseFrame.Parent -- A Janela principal (Window)
+	local SideBar = Window:WaitForChild("SideBar") -- Referência da SideBar
 	
 	Button.MouseButton1Click:Connect(function()
-
+		-- 1. Esconde o aviso de confirmação
 		CloseFrame.Visible = false
+	
+		-- 2. Faz as abas (SideBar) aparecerem de novo
 		SideBar.Visible = true
 	end)
 end;
 task.spawn(C_16);
+-- StarterGui.Slayer Hub.Bolinha.LocalScript
 local function C_1d()
 local script = G2L["1d"];
 	local UIS = game:GetService("UserInputService")
 	local Bolinha = script.Parent
 	local ScreenGui = Bolinha.Parent
 	local Window = ScreenGui:WaitForChild("Window")
-
+	
+	-- Variáveis de Arraste (Privadas da Bolinha)
 	local dragging
 	local dragInput
 	local dragStart
@@ -2031,6 +2061,7 @@ local script = G2L["1d"];
 		Bolinha.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 	end
 	
+	-- Lógica de Arraste da Bolinha
 	Bolinha.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			dragging = true
@@ -2057,7 +2088,8 @@ local script = G2L["1d"];
 		end
 	end)
 	
-	
+	-- LÓGICA DE CLIQUE (ABRIR / FECHAR)
+	-- Usamos um filtro para não abrir/fechar enquanto estiver apenas arrastando
 	local startPosMouse
 	
 	Bolinha.MouseButton1Down:Connect(function()
@@ -2069,7 +2101,7 @@ local script = G2L["1d"];
 		if startPosMouse then
 			local magnitude = (startPosMouse - endPosMouse).Magnitude
 	
-			
+			-- Se moveu menos de 5 pixels, o script entende que foi um CLIQUE e não um ARRASTE
 			if magnitude < 5 then
 				Window.Visible = not Window.Visible
 			end
@@ -2078,5 +2110,6 @@ local script = G2L["1d"];
 end;
 task.spawn(C_1d);
 
-local FinalLibrary = G2L_MODULES[G2L["2"]].Closure() 
-return FinalLibrary
+local LibraryModule = G2L["18"] 
+local Library = require(LibraryModule) 
+return G2L["1"], require;
