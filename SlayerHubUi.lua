@@ -2,9 +2,10 @@
 local G2L = {};
 
 -- StarterGui.Slayer Hub
-G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
-G2L["1"]["Name"] = [[Slayer Hub]];
-G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
+G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
+G2L["1"]["Name"] = [[Slayer Hub]]
+G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling
+G2L["1"]["ResetOnSpawn"] = false
 
 
 -- StarterGui.Slayer Hub.Library
@@ -1502,9 +1503,10 @@ function Library:CreateWindow(options)
 		end
 
 		-- === FUNÇÃO: ADD TOGGLE ===
-		function Elements:AddToggle(toggleConfig)
+		function Elements:AddToggle(tglCfg)
 			Index = Index + 1
-			local Toggle = { Value = toggleConfig.Default or false, Callback = function() end }
+			-- Corrigido: Usando 'tglCfg' em vez de 'toggleConfig'
+			local Toggle = { Value = tglCfg.Default or false, Callback = tglCfg.Callback or function() end }
 
 			local ToggleFrame = Instance.new("TextButton", Page)
 			ToggleFrame.Name = toggleConfig.Name .. "_Toggle"
@@ -2110,6 +2112,5 @@ local script = G2L["1d"];
 end;
 task.spawn(C_1d);
 
-local LibraryModule = G2L["18"] 
-local Library = require(LibraryModule) 
-return G2L["1"], require;
+local Library = G2L_MODULES[G2L["2"]].Closure()
+return Library
