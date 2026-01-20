@@ -1502,63 +1502,68 @@ function Library:CreateWindow(options)
 			return Button
 		end
 
-		function Elements:AddToggle(toggleConfig)
-			Index = Index + 1
-			local Toggle = { Value = toggleConfig.Default or false, Callback = function() end }
+		-- === FUNÇÃO: ADD TOGGLE ===
+function Elements:AddToggle(tglCfg)
+    Index = Index + 1
+    -- Aqui você corrigiu:
+    local Toggle = { Value = tglCfg.Default or false, Callback = tglCfg.Callback or function() end }
 
-			local ToggleFrame = Instance.new("TextButton", Page)
-			ToggleFrame.Name = toggleConfig.Name .. "_Toggle"
-			ToggleFrame.Size = UDim2.new(1, -20, 0, 45)
-			ToggleFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-			ToggleFrame.Text = ""
-			ToggleFrame.AutoButtonColor = false
-			ToggleFrame.LayoutOrder = Index -- Ordem definida pelo script
-			Instance.new("UICorner", ToggleFrame).CornerRadius = UDim.new(0, 8)
+    local ToggleFrame = Instance.new("TextButton", Page)
+    -- ERRO ESTAVA AQUI: mudei toggleConfig para tglCfg
+    ToggleFrame.Name = (tglCfg.Name or "Toggle") .. "_Toggle" 
+    ToggleFrame.Size = UDim2.new(1, -20, 0, 45)
+    ToggleFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    ToggleFrame.Text = ""
+    ToggleFrame.AutoButtonColor = false
+    ToggleFrame.LayoutOrder = Index 
+    Instance.new("UICorner", ToggleFrame).CornerRadius = UDim.new(0, 8)
 
-			local T_Title = Instance.new("TextLabel", ToggleFrame)
-			T_Title.Text = toggleConfig.Name or "Toggle"
-			T_Title.Size = UDim2.new(1, -65, 0, 20)
-			T_Title.Position = UDim2.new(0, 15, 0, 8)
-			T_Title.TextColor3 = Color3.new(1, 1, 1)
-			T_Title.Font = Enum.Font.GothamBold
-			T_Title.TextSize = 13
-			T_Title.TextXAlignment = Enum.TextXAlignment.Left
-			T_Title.BackgroundTransparency = 1
+    local T_Title = Instance.new("TextLabel", ToggleFrame)
+    -- ERRO ESTAVA AQUI: mudei toggleConfig para tglCfg
+    T_Title.Text = tglCfg.Name or "Toggle"
+    T_Title.Size = UDim2.new(1, -65, 0, 20)
+    T_Title.Position = UDim2.new(0, 15, 0, 8)
+    T_Title.TextColor3 = Color3.new(1, 1, 1)
+    T_Title.Font = Enum.Font.GothamBold
+    T_Title.TextSize = 13
+    T_Title.TextXAlignment = Enum.TextXAlignment.Left
+    T_Title.BackgroundTransparency = 1
 
-			local T_Desc = Instance.new("TextLabel", ToggleFrame)
-			T_Desc.Text = toggleConfig.Description or ""
-			T_Desc.Size = UDim2.new(1, -65, 0, 15)
-			T_Desc.Position = UDim2.new(0, 15, 0, 24)
-			T_Desc.TextColor3 = Color3.fromRGB(150, 150, 150)
-			T_Desc.TextSize = 10
-			T_Desc.Font = Enum.Font.Gotham
-			T_Desc.TextXAlignment = Enum.TextXAlignment.Left
-			T_Desc.BackgroundTransparency = 1
+    local T_Desc = Instance.new("TextLabel", ToggleFrame)
+    -- ERRO ESTAVA AQUI: mudei toggleConfig para tglCfg
+    T_Desc.Text = tglCfg.Description or ""
+    T_Desc.Size = UDim2.new(1, -65, 0, 15)
+    T_Desc.Position = UDim2.new(0, 15, 0, 24)
+    T_Desc.TextColor3 = Color3.fromRGB(150, 150, 150)
+    T_Desc.TextSize = 10
+    T_Desc.Font = Enum.Font.Gotham
+    T_Desc.TextXAlignment = Enum.TextXAlignment.Left
+    T_Desc.BackgroundTransparency = 1
 
-			local ToggleSlider = Instance.new("Frame", ToggleFrame)
-			ToggleSlider.Size = UDim2.new(0, 32, 0, 16)
-			ToggleSlider.Position = UDim2.new(1, -45, 0.5, -8)
-			ToggleSlider.BackgroundColor3 = Color_Theme
-			Instance.new("UICorner", ToggleSlider).CornerRadius = UDim.new(1, 0)
+    local ToggleSlider = Instance.new("Frame", ToggleFrame)
+    ToggleSlider.Size = UDim2.new(0, 32, 0, 16)
+    ToggleSlider.Position = UDim2.new(1, -45, 0.5, -8)
+    ToggleSlider.BackgroundColor3 = Color_Theme
+    Instance.new("UICorner", ToggleSlider).CornerRadius = UDim.new(1, 0)
 
-			local ToggleCircle = Instance.new("ImageLabel", ToggleSlider)
-			ToggleCircle.Size = UDim2.fromOffset(12, 12)
-			ToggleCircle.Position = UDim2.new(0, 2, 0.5, -6)
-			ToggleCircle.Image = "http://www.roblox.com/asset/?id=12266946128"
-			ToggleCircle.BackgroundTransparency = 1
+    local ToggleCircle = Instance.new("ImageLabel", ToggleSlider)
+    ToggleCircle.Size = UDim2.fromOffset(12, 12)
+    ToggleCircle.Position = UDim2.new(0, 2, 0.5, -6)
+    ToggleCircle.Image = "http://www.roblox.com/asset/?id=12266946128"
+    ToggleCircle.BackgroundTransparency = 1
 
-			function Toggle:SetValue(v)
-				Toggle.Value = v
-				local targetPos = Toggle.Value and UDim2.new(0, 18, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
-				TweenService:Create(ToggleCircle, TweenInfo.new(0.2), {Position = targetPos}):Play()
-				TweenService:Create(ToggleSlider, TweenInfo.new(0.2), {BackgroundTransparency = Toggle.Value and 0 or 0.7}):Play()
-				if Toggle.Callback then task.spawn(Toggle.Callback, Toggle.Value) end
-			end
+    function Toggle:SetValue(v)
+        Toggle.Value = v
+        local targetPos = Toggle.Value and UDim2.new(0, 18, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
+        TweenService:Create(ToggleCircle, TweenInfo.new(0.2), {Position = targetPos}):Play()
+        TweenService:Create(ToggleSlider, TweenInfo.new(0.2), {BackgroundTransparency = Toggle.Value and 0 or 0.7}):Play()
+        if Toggle.Callback then task.spawn(Toggle.Callback, Toggle.Value) end
+    end
 
-			ToggleFrame.MouseButton1Click:Connect(function() Toggle:SetValue(not Toggle.Value) end)
-			Toggle:SetValue(Toggle.Value)
-			return Toggle
-		end
+    ToggleFrame.MouseButton1Click:Connect(function() Toggle:SetValue(not Toggle.Value) end)
+    Toggle:SetValue(Toggle.Value)
+    return Toggle
+end
 
 		-- === FUNÇÃO: ADD DROPDOWN (MELHORADO) ===
 		function Elements:AddDropdown(name, dropConfig)
