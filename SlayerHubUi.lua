@@ -1502,11 +1502,9 @@ function Library:CreateWindow(options)
 			return Button
 		end
 
-		-- === FUNÇÃO: ADD TOGGLE ===
-		function Elements:AddToggle(tglCfg)
+		function Elements:AddToggle(toggleConfig)
 			Index = Index + 1
-			-- Corrigido: Usando 'tglCfg' em vez de 'toggleConfig'
-			local Toggle = { Value = tglCfg.Default or false, Callback = tglCfg.Callback or function() end }
+			local Toggle = { Value = toggleConfig.Default or false, Callback = function() end }
 
 			local ToggleFrame = Instance.new("TextButton", Page)
 			ToggleFrame.Name = toggleConfig.Name .. "_Toggle"
