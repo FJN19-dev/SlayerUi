@@ -1,11 +1,14 @@
+-[[
+    Slayer Hub X - Fix Version
+]]
 
-local G2L = {};
+local G2L = {}
 
--- StarterGui.Slayer Hub
-G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
-G2L["1"]["Name"] = [[Slayer Hub]];
-G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
-
+-- Criando a ScreenGui principal
+G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
+G2L["1"]["Name"] = [[Slayer Hub]]
+G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling
+G2L["1"]["ResetOnSpawn"] = false
 
 -- StarterGui.Slayer Hub.Library
 G2L["2"] = Instance.new("ModuleScript", G2L["1"]);
@@ -295,11 +298,9 @@ end
 
 G2L_MODULES[G2L["2"]] = {
 Closure = function()
-    local script = G2L["2"];local Library = {Objects = {},}
-local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-
-local Lucide = {
+    local script = G2L["2"];
+    local Library = {Objects = {},}
+	local Lucide = {
 	["lucide-accessibility"] = "rbxassetid://10709751939",
 	["lucide-activity"] = "rbxassetid://10709752035",
 	["lucide-air-vent"] = "rbxassetid://10709752131",
@@ -1119,6 +1120,8 @@ local Lucide = {
 	["lucide-zoom-in"] = "rbxassetid://10747384552",
 	["lucide-zoom-out"] = "rbxassetid://10747384679",
 }
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 
 -- Configurações de Cores
 local Color_Theme = Color3.fromRGB(120, 0, 200) 
@@ -2075,6 +2078,5 @@ local script = G2L["1d"];
 end;
 task.spawn(C_1d);
 
-local LibraryModule = G2L["18"] 
-local Library = require(LibraryModule) 
-return Library
+local FinalLibrary = G2L_MODULES[G2L["2"]].Closure() 
+return FinalLibrary
