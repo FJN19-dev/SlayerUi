@@ -1728,56 +1728,53 @@ end
 		end
 
 		-- === FUNÇÃO: ADD PARAGRAPH ===
-		-- Função ajustada para receber strings diretamente
-function Elements:AddParagraph(title, content)
-    -- Incrementa o index da aba atual
-    self.Index = (self.Index or 0) + 1
+		function Elements:AddParagraph(parConfig)
+			Index = Index + 1
 
-    local ParagraphFrame = Instance.new("Frame")
-    ParagraphFrame.Name = "Paragraph_" .. self.Index
-    ParagraphFrame.Parent = self.Page -- Referência ao container da aba
-    ParagraphFrame.Size = UDim2.new(1, -20, 0, 0)
-    ParagraphFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    ParagraphFrame.AutomaticSize = Enum.AutomaticSize.Y
-    ParagraphFrame.LayoutOrder = self.Index
+			local ParagraphFrame = Instance.new("Frame", Page)
+			ParagraphFrame.Name = "Paragraph_" .. Index
+			ParagraphFrame.Size = UDim2.new(1, -20, 0, 0) -- Começa com altura 0
+			ParagraphFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+			ParagraphFrame.AutomaticSize = Enum.AutomaticSize.Y -- Ajusta a altura conforme o texto
+			ParagraphFrame.LayoutOrder = Index
 
-    local P_Corner = Instance.new("UICorner", ParagraphFrame)
-    P_Corner.CornerRadius = UDim.new(0, 8)
+			local P_Corner = Instance.new("UICorner", ParagraphFrame)
+			P_Corner.CornerRadius = UDim.new(0, 8)
 
-    local P_Stroke = Instance.new("UIStroke", ParagraphFrame)
-    P_Stroke.Color = Color3.fromRGB(45, 45, 45)
-    P_Stroke.Transparency = 0.5
+			local P_Stroke = Instance.new("UIStroke", ParagraphFrame)
+			P_Stroke.Color = Color3.fromRGB(45, 45, 45)
+			P_Stroke.Transparency = 0.5
 
-    local P_Title = Instance.new("TextLabel", ParagraphFrame)
-    -- Agora usamos a variável 'title' diretamente
-    P_Title.Text = title or "Paragraph"
-    P_Title.Size = UDim2.new(1, -20, 0, 20)
-    P_Title.Position = UDim2.fromOffset(10, 8)
-    P_Title.TextColor3 = Color3.new(1, 1, 1)
-    P_Title.Font = Enum.Font.GothamBold
-    P_Title.TextSize = 13
-    P_Title.TextXAlignment = Enum.TextXAlignment.Left
-    P_Title.BackgroundTransparency = 1
+			local P_Title = Instance.new("TextLabel", ParagraphFrame)
+			P_Title.Text = parConfig.Title or "Paragraph"
+			P_Title.Size = UDim2.new(1, -20, 0, 20)
+			P_Title.Position = UDim2.fromOffset(10, 8)
+			P_Title.TextColor3 = Color3.new(1, 1, 1)
+			P_Title.Font = Enum.Font.GothamBold
+			P_Title.TextSize = 13
+			P_Title.TextXAlignment = Enum.TextXAlignment.Left
+			P_Title.BackgroundTransparency = 1
 
-    local P_Content = Instance.new("TextLabel", ParagraphFrame)
-    -- Agora usamos a variável 'content' diretamente
-    P_Content.Text = content or ""
-    P_Content.Size = UDim2.new(1, -20, 0, 0)
-    P_Content.Position = UDim2.fromOffset(10, 28)
-    P_Content.TextColor3 = Color3.fromRGB(200, 200, 200)
-    P_Content.Font = Enum.Font.Gotham
-    P_Content.TextSize = 12
-    P_Content.TextXAlignment = Enum.TextXAlignment.Left
-    P_Content.TextYAlignment = Enum.TextYAlignment.Top
-    P_Content.BackgroundTransparency = 1
-    P_Content.TextWrapped = true
-    P_Content.AutomaticSize = Enum.AutomaticSize.Y
+			local P_Content = Instance.new("TextLabel", ParagraphFrame)
+			P_Content.Text = parConfig.Content or ""
+			P_Content.Size = UDim2.new(1, -20, 0, 0)
+			P_Content.Position = UDim2.fromOffset(10, 28)
+			P_Content.TextColor3 = Color3.fromRGB(200, 200, 200)
+			P_Content.Font = Enum.Font.Gotham
+			P_Content.TextSize = 12
+			P_Content.TextXAlignment = Enum.TextXAlignment.Left
+			P_Content.TextYAlignment = Enum.TextYAlignment.Top
+			P_Content.BackgroundTransparency = 1
+			P_Content.TextWrapped = true -- Permite quebra de linha
+			P_Content.AutomaticSize = Enum.AutomaticSize.Y -- Faz o label crescer com o conteúdo
 
-    local Padding = Instance.new("UIPadding", ParagraphFrame)
-    Padding.PaddingBottom = UDim.new(0, 10)
+			-- Adiciona um espaço (padding) no fundo para não ficar colado
+			local Padding = Instance.new("UIPadding", ParagraphFrame)
+			Padding.PaddingBottom = UDim.new(0, 10)
+			Padding.PaddingTop = UDim.new(0, 0)
 
-    return ParagraphFrame
-end
+			return ParagraphFrame
+		end
 		-- === FUNÇÃO: ADD SECTION ===
 		function Elements:AddSection(name)
 			Index = Index + 1
