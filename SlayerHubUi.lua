@@ -1824,6 +1824,97 @@ end
 
 			return SectionFrame
 		end
+
+		-- === FUNÇÃO: ADD DISCORD INVITE ===
+function Elements:AddDiscordInvite(data)
+    Index = Index + 1
+    
+    local InviteName = data.Name or "Discord"
+    local InviteLogo = data.Logo or "rbxassetid://0"
+    local InviteLink = data.Invite or "https://discord.gg/"
+
+    -- Container Principal
+    local InviteFrame = Instance.new("Frame", Page)
+    InviteFrame.Name = "DiscordInvite_" .. InviteName
+    InviteFrame.Size = UDim2.new(1, -20, 0, 110)
+    InviteFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25) -- Fundo escuro
+    InviteFrame.BorderSizePixel = 0
+    InviteFrame.LayoutOrder = Index
+
+    local UICorner = Instance.new("UICorner", InviteFrame)
+    UICorner.CornerRadius = UDim.new(0, 6)
+
+    -- Link de texto azul (no topo)
+    local LinkText = Instance.new("TextLabel", InviteFrame)
+    LinkText.Text = InviteLink
+    LinkText.Size = UDim2.new(1, -20, 0, 20)
+    LinkText.Position = UDim2.new(0, 10, 0, 5)
+    LinkText.TextColor3 = Color3.fromRGB(0, 162, 255) -- Azul Discord
+    LinkText.Font = Enum.Font.GothamMedium
+    LinkText.TextSize = 12
+    LinkText.TextXAlignment = Enum.TextXAlignment.Left
+    LinkText.BackgroundTransparency = 1
+
+    -- Logo do Servidor (Redondo)
+    local Logo = Instance.new("ImageLabel", InviteFrame)
+    Logo.Name = "Logo"
+    Logo.Position = UDim2.new(0, 10, 0, 30)
+    Logo.Size = UDim2.fromOffset(40, 40)
+    Logo.Image = InviteLogo
+    Logo.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    
+    local LogoCorner = Instance.new("UICorner", Logo)
+    LogoCorner.CornerRadius = UDim.new(0, 8)
+
+    -- Título do Servidor
+    local ServerTitle = Instance.new("TextLabel", InviteFrame)
+    ServerTitle.Text = InviteName .. " | Community"
+    ServerTitle.Position = UDim2.new(0, 60, 0, 32)
+    ServerTitle.Size = UDim2.new(1, -70, 0, 20)
+    ServerTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ServerTitle.Font = Enum.Font.GothamBold
+    ServerTitle.TextSize = 14
+    ServerTitle.TextXAlignment = Enum.TextXAlignment.Left
+    ServerTitle.BackgroundTransparency = 1
+
+    -- Subtexto "Join Server"
+    local Subtitle = Instance.new("TextLabel", InviteFrame)
+    Subtitle.Text = "Join server"
+    Subtitle.Position = UDim2.new(0, 60, 0, 48)
+    Subtitle.Size = UDim2.new(1, -70, 0, 15)
+    Subtitle.TextColor3 = Color3.fromRGB(150, 150, 150)
+    Subtitle.Font = Enum.Font.Gotham
+    Subtitle.TextSize = 12
+    Subtitle.TextXAlignment = Enum.TextXAlignment.Left
+    Subtitle.BackgroundTransparency = 1
+
+    -- Botão Join (Verde)
+    local JoinBtn = Instance.new("TextButton", InviteFrame)
+    JoinBtn.Name = "JoinButton"
+    JoinBtn.Text = "Join"
+    JoinBtn.Size = UDim2.new(1, -20, 0, 28)
+    JoinBtn.Position = UDim2.new(0, 10, 0, 75)
+    JoinBtn.BackgroundColor3 = Color3.fromRGB(45, 125, 70) -- Verde escuro
+    JoinBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    JoinBtn.Font = Enum.Font.GothamBold
+    JoinBtn.TextSize = 14
+    JoinBtn.AutoButtonColor = true
+
+    local BtnCorner = Instance.new("UICorner", JoinBtn)
+    BtnCorner.CornerRadius = UDim.new(0, 4)
+
+    -- Funcionalidade de clique
+    JoinBtn.MouseButton1Click:Connect(function()
+        if setclipboard then
+            setclipboard(InviteLink)
+            JoinBtn.Text = "Link Copied!"
+            task.wait(2)
+            JoinBtn.Text = "Join"
+        end
+    end)
+
+    return InviteFrame
+end
 		-- === FUNÇÃO: ADD SLIDER (ATUALIZADA) ===
 		function Elements:AddSlider(sliderConfig)
 			Index = Index + 1
