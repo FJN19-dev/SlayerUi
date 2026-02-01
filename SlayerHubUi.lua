@@ -1360,162 +1360,125 @@ function Library:CreateWindow(options)
 	Container.Position = UDim2.new(0, 170, 0, 55) -- Começa depois da sidebar e abaixo do título
 	Container.BackgroundTransparency = 1
 
-	local Tabs = {FirstTab = nil}
+	local TweenService = game:GetService("TweenService")
+local Tabs = {FirstTab = nil}
 
-	function Tabs:AddTab(tabConfig)
-		local Index = 0 
-		local IconID = tabConfig.Icon or ""
+function Tabs:AddTab(tabConfig)
+    local IconID = tabConfig.Icon or ""
 
-		local TabButton = Instance.new("TextButton", TabScroll)
-		TabButton.Size = UDim2.new(0, 140, 0, 35)
-		TabButton.Text = "" -- Deixamos o texto vazio para usar um Label customizado
-		TabButton.BackgroundColor3 = Color_Inactive
-		TabButton.AutoButtonColor = false
-		Instance.new("UICorner", TabButton).CornerRadius = UDim.new(0, 6)
+    -- 1. Criar o Botão da Aba
+    local TabButton = Instance.new("TextButton")
+    TabButton.Name = tabConfig.Title .. "_Tab"
+    TabButton.Parent = TabScroll
+    TabButton.Size = UDim2.new(0, 140, 0, 35)
+    TabButton.Text = "" -- Usaremos Labels e Icons customizados
+    TabButton.BackgroundColor3 = Color_Inactive
+    TabButton.AutoButtonColor = false
+    Instance.new("UICorner", TabButton).CornerRadius = UDim.new(0, 6)
 
-		-- Container do conteúdo do botão (Ícone + Texto)
-		local ButtonContent = Instance.new("Frame", TabButton)
-		ButtonContent.Size = UDim2.new(1, 0, 1, 0)
-		ButtonContent.BackgroundTransparency = 1
+    -- 2. Barrinha Vertical Lateral (Animação estilo imagem)
+    local Indicator = Instance.new("Frame")
+    Indicator.Name = "Indicator"
+    Indicator.Parent = TabButton
+    Indicator.BackgroundColor3 = Color3.fromRGB(170, 100, 255) -- Roxo
+    Indicator.BorderSizePixel = 0
+    Indicator.AnchorPoint = Vector2.new(0, 0.5)
+    Indicator.Position = UDim2.new(0, 2, 0.5, 0) -- Leve margem da esquerda
+    Indicator.Size = UDim2.new(0, 3, 0, 0)       -- Começa com altura 0
+    Instance.new("UICorner", Indicator).CornerRadius = UDim.new(1, 0)
 
-		-- Ícone (Opcional)
-		local TabIcon = Instance.new("ImageLabel", ButtonContent)
-		TabIcon.Size = UDim2.fromOffset(18, 18)
-		TabIcon.Position = UDim2.new(0, 10, 0.5, -9)
-		TabIcon.BackgroundTransparency = 1
-		TabIcon.ImageColor3 = Color3.fromRGB(200, 200, 200)
+    -- 3. Container Interno (Ícone + Texto)
+    local ButtonContent = Instance.new("Frame", TabButton)
+    ButtonContent.Name = "Content"
+    ButtonContent.Size = UDim2.new(1, 0, 1, 0)
+    ButtonContent.BackgroundTransparency = 1
 
-		-- Verifica se o ícone existe na tabela Lucide ou se é um rbxassetid direto
-		if IconID ~= "" then
-			TabIcon.Image = Lucide[IconID] or IconID
-			TabIcon.Visible = true
-		else
-			TabIcon.Visible = false
-		end
-
-		-- Texto da Aba
-		local TabLabel = Instance.new("TextLabel", ButtonContent)
-		TabLabel.Text = tabConfig.Title
-		TabLabel.Font = Enum.Font.GothamBold
-		TabLabel.TextSize = 13
-		TabLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-		TabLabel.BackgroundTransparency = 1
-		-- Se tiver ícone, empurra o texto para o lado. Se não, centraliza.
-		TabLabel.Size = TabIcon.Visible and UDim2.new(1, -35, 1, 0) or UDim2.new(1, 0, 1, 0)
-		TabLabel.Position = TabIcon.Visible and UDim2.new(0, 35, 0, 0) or UDim2.new(0, 0, 0, 0)
-		TabLabel.TextXAlignment = TabIcon.Visible and Enum.TextXAlignment.Left or Enum.TextXAlignment.Center
-
-		local Page = Instance.new("ScrollingFrame", Container)
-		Page.Name = tabConfig.Title .. "_Page"
-		Page.Size = UDim2.new(1, 0, 1, 0)
-		Page.BackgroundTransparency = 1
-		Page.Visible = false
-		Page.ScrollBarThickness = 2
-		Page.ScrollBarImageColor3 = Color_Theme
-		Page.BorderSizePixel = 0
-		Page.AutomaticCanvasSize = Enum.AutomaticSize.Y
-
-		local PageLayout = Instance.new("UIListLayout", Page)
-		PageLayout.Padding = UDim.new(0, 8)
-		PageLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-		PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
-		-- Função auxiliar para animação (mais curta e reutilizável)
-local function tween(obj, props, time)
-    time = time or 0.25
-    TweenService:Create(obj, TweenInfo.new(time, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), props):Play()
-end
-
--- Evento de Clique
-TabButton.MouseButton1Click:Connect(function()
-    -- Desativa todas as páginas
-    for _, child in pairs(Container:GetChildren()) do
-        if child:IsA("ScrollingFrame") then
-            child.Visible = false
-        end
+    -- 4. Ícone
+    local TabIcon = Instance.new("ImageLabel", ButtonContent)
+    TabIcon.Size = UDim2.fromOffset(18, 18)
+    TabIcon.Position = UDim2.new(0, 12, 0.5, -9) -- Posição ajustada
+    TabIcon.BackgroundTransparency = 1
+    TabIcon.ImageColor3 = Color3.fromRGB(150, 150, 150)
+    
+    if IconID ~= "" then
+        TabIcon.Image = Lucide[IconID] or IconID
+        TabIcon.Visible = true
+    else
+        TabIcon.Visible = false
     end
 
-    -- Desativa todos os botões + conteúdo interno (ícone e texto)
-    for _, btn in pairs(TabScroll:GetChildren()) do
-        if btn:IsA("TextButton") then
-            -- Anima fundo e texto do botão
-            tween(btn, {
-                BackgroundColor3 = Color_Inactive,
-                TextColor3 = Color3.fromRGB(150, 150, 150)
-            }, 0.25)
+    -- 5. Texto da Aba
+    local TabLabel = Instance.new("TextLabel", ButtonContent)
+    TabLabel.Text = tabConfig.Title
+    TabLabel.Font = Enum.Font.GothamBold
+    TabLabel.TextSize = 13
+    TabLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+    TabLabel.BackgroundTransparency = 1
+    TabLabel.Size = TabIcon.Visible and UDim2.new(1, -40, 1, 0) or UDim2.new(1, 0, 1, 0)
+    TabLabel.Position = TabIcon.Visible and UDim2.new(0, 38, 0, 0) or UDim2.new(0, 0, 0, 0)
+    TabLabel.TextXAlignment = TabIcon.Visible and Enum.TextXAlignment.Left or Enum.TextXAlignment.Center
 
-            -- Reseta ícone e label dentro do Frame "content"
-            local content = btn:FindFirstChild("Frame")  -- ou o nome correto do frame
-            if content then
-                local txt = content:FindFirstChild("TextLabel")
-                local ico = content:FindFirstChild("ImageLabel")
+    -- 6. Página de Conteúdo
+    local Page = Instance.new("ScrollingFrame", Container)
+    Page.Name = tabConfig.Title .. "_Page"
+    Page.Size = UDim2.new(1, 0, 1, 0)
+    Page.BackgroundTransparency = 1
+    Page.Visible = false
+    Page.ScrollBarThickness = 2
+    Page.BorderSizePixel = 0
+    Page.AutomaticCanvasSize = Enum.AutomaticSize.Y
+
+    local PageLayout = Instance.new("UIListLayout", Page)
+    PageLayout.Padding = UDim.new(0, 8)
+    PageLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    -- Função de Animação
+    local function anim(obj, props, time)
+        TweenService:Create(obj, TweenInfo.new(time or 0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), props):Play()
+    end
+
+    -- 7. Lógica de Clique
+    TabButton.MouseButton1Click:Connect(function()
+        -- Esconder todas as páginas e resetar botões
+        for _, child in pairs(Container:GetChildren()) do
+            if child:IsA("ScrollingFrame") then child.Visible = false end
+        end
+
+        for _, btn in pairs(TabScroll:GetChildren()) do
+            if btn:IsA("TextButton") then
+                local content = btn:FindFirstChild("Content")
+                local ind = btn:FindFirstChild("Indicator")
                 
-                if txt then
-                    tween(txt, {TextColor3 = Color3.fromRGB(150, 150, 150)}, 0.25)
+                -- Animação de Desativação
+                anim(btn, {BackgroundColor3 = Color_Inactive})
+                if content then
+                    anim(content:FindFirstChildOfClass("TextLabel"), {TextColor3 = Color3.fromRGB(150, 150, 150)})
+                    anim(content:FindFirstChildOfClass("ImageLabel"), {ImageColor3 = Color3.fromRGB(150, 150, 150)})
                 end
-                
-                if ico then
-                    tween(ico, {ImageColor3 = Color3.fromRGB(150, 150, 150)}, 0.25)
+                if ind then
+                    anim(ind, {Size = UDim2.new(0, 3, 0, 0)}) -- Recolhe a barra
                 end
             end
-
-            -- Esconde tracinho das outras abas
-            local ul = btn:FindFirstChild("Underline")
-            if ul then
-                tween(ul, {Size = UDim2.new(0, 0, 0, 3)}, 0.3)
-            end
         end
+
+        -- Ativar Aba Clicada
+        Page.Visible = true
+        anim(TabButton, {BackgroundColor3 = Color3.fromRGB(40, 40, 40)}) -- Destaque sutil no fundo
+        anim(TabLabel, {TextColor3 = Color3.new(1, 1, 1)})
+        anim(TabIcon, {ImageColor3 = Color3.new(1, 1, 1)})
+        anim(Indicator, {Size = UDim2.new(0, 3, 0.6, 0)}) -- Expande a barra lateral (60% da altura)
+    end)
+
+    -- Configuração Inicial (Primeira Aba)
+    if not Tabs.FirstTab then
+        Tabs.FirstTab = Page
+        Page.Visible = true
+        TabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        TabLabel.TextColor3 = Color3.new(1, 1, 1)
+        TabIcon.ImageColor3 = Color3.new(1, 1, 1)
+        Indicator.Size = UDim2.new(0, 3, 0.6, 0)
     end
-
-    -- Ativa a aba clicada
-    Page.Visible = true
-
-    -- Anima fundo e texto do botão ativo
-    tween(TabButton, {
-        BackgroundColor3 = Color_Theme,
-        TextColor3 = Color3.new(1, 1, 1)
-    }, 0.25)
-
-    -- Anima ícone e label da aba ativa
-    if TabLabel then
-        tween(TabLabel, {TextColor3 = Color3.new(1, 1, 1)}, 0.25)
-    end
-    if TabIcon then
-        tween(TabIcon, {ImageColor3 = Color3.new(1, 1, 1)}, 0.25)
-    end
-
-    -- Anima o tracinho roxo crescendo
-    if Underline then
-        tween(Underline, {
-            Size = UDim2.new(1, 0, 0, 3)   -- toda a largura (ou use 0.8,0 se preferir menor)
-        }, 0.35)
-    end
-end)
-
--- Primeira aba (ativa com animação também)
-if not Tabs.FirstTab then
-    Tabs.FirstTab = Page
-    Page.Visible = true
-
-    tween(TabButton, {
-        BackgroundColor3 = Color_Theme,
-        TextColor3 = Color3.new(1, 1, 1)
-    }, 0.25)
-
-    if TabLabel then
-        tween(TabLabel, {TextColor3 = Color3.new(1, 1, 1)}, 0.25)
-    end
-    if TabIcon then
-        tween(TabIcon, {ImageColor3 = Color3.new(1, 1, 1)}, 0.25)
-    end
-
-    if Underline then
-        tween(Underline, {
-            Size = UDim2.new(1, 0, 0, 3)
-        }, 0.35)
-    end
-end
-
 		local Elements = {}
 
 		-- === FUNÇÃO: ADD BUTTON (com animações premium) ===
