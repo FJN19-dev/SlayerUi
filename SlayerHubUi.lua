@@ -1452,56 +1452,156 @@ function Library:CreateWindow(options)
 
 		local Elements = {}
 
-		-- === FUNÇÃO: ADD BUTTON ===
-		function Elements:AddButton(buttonConfig)
-			Index = Index + 1
-			local Button = { Callback = buttonConfig.Callback or function() end }
-
-			local ButtonFrame = Instance.new("TextButton", Page)
-			ButtonFrame.Name = (buttonConfig.Title or "Button") .. "_Button"
-			ButtonFrame.Size = UDim2.new(1, -20, 0, 45)
-			ButtonFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-			ButtonFrame.Text = ""
-			ButtonFrame.AutoButtonColor = false
-			ButtonFrame.LayoutOrder = Index -- Ordem definida pelo script
-			Instance.new("UICorner", ButtonFrame).CornerRadius = UDim.new(0, 8)
-
-			local B_Title = Instance.new("TextLabel", ButtonFrame)
-			B_Title.Text = buttonConfig.Title or "Button"
-			B_Title.Size = UDim2.new(1, -65, 0, 20)
-			B_Title.Position = UDim2.new(0, 15, 0, 8)
-			B_Title.TextColor3 = Color3.new(1, 1, 1)
-			B_Title.BackgroundTransparency = 1
-			B_Title.Font = Enum.Font.GothamBold
-			B_Title.TextSize = 13
-			B_Title.TextXAlignment = Enum.TextXAlignment.Left
-
-			local B_Desc = Instance.new("TextLabel", ButtonFrame)
-			B_Desc.Text = buttonConfig.Description or ""
-			B_Desc.Size = UDim2.new(1, -65, 0, 15)
-			B_Desc.Position = UDim2.new(0, 15, 0, 24)
-			B_Desc.TextColor3 = Color3.fromRGB(150, 150, 150)
-			B_Desc.BackgroundTransparency = 1
-			B_Desc.TextSize = 10
-			B_Desc.Font = Enum.Font.Gotham
-			B_Desc.TextXAlignment = Enum.TextXAlignment.Left
-
-			local ClickIcon = Instance.new("ImageLabel", ButtonFrame)
-			ClickIcon.Size = UDim2.fromOffset(22, 22)
-			ClickIcon.Position = UDim2.new(1, -38, 0.5, -11)
-			ClickIcon.BackgroundTransparency = 1
-			ClickIcon.Image = "rbxassetid://95048685306752"
-			ClickIcon.ImageColor3 = Color_Theme
-
-			ButtonFrame.MouseButton1Click:Connect(function()
-				local t = TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {BackgroundColor3 = Color_Theme})
-				t:Play()
-				task.spawn(Button.Callback)
-			end)
-
-			return Button
-		end
-
+		-- === FUNÇÃO: ADD BUTTON (com animações premium) ===
+function Elements:AddButton(buttonConfig)
+    Index = Index + 1
+    
+    local Button = { Callback = buttonConfig.Callback or function() end }
+    
+    local ButtonFrame = Instance.new("TextButton")
+    ButtonFrame.Name = (buttonConfig.Title or "Button") .. "_Button"
+    ButtonFrame.Parent = Page
+    ButtonFrame.Size = UDim2.new(1, -20, 0, 50)          -- um pouco mais alto pra ficar bonito
+    ButtonFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    ButtonFrame.Text = ""
+    ButtonFrame.AutoButtonColor = false
+    ButtonFrame.LayoutOrder = Index
+    ButtonFrame.ClipsDescendants = true
+    
+    local UICorner = Instance.new("UICorner", ButtonFrame)
+    UICorner.CornerRadius = UDim.new(0, 12)
+    
+    local UIGradient = Instance.new("UIGradient", ButtonFrame)
+    UIGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(45, 45, 45)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(25, 25, 25))
+    }
+    UIGradient.Rotation = 90
+    
+    -- Borda de glow (pra hover)
+    local Stroke = Instance.new("UIStroke", ButtonFrame)
+    Stroke.Color = Color_Theme
+    Stroke.Thickness = 1.5
+    Stroke.Transparency = 1
+    Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    
+    -- Título
+    local B_Title = Instance.new("TextLabel", ButtonFrame)
+    B_Title.Text = buttonConfig.Title or "Button"
+    B_Title.Size = UDim2.new(1, -70, 0, 22)
+    B_Title.Position = UDim2.new(0, 18, 0, 8)
+    B_Title.BackgroundTransparency = 1
+    B_Title.TextColor3 = Color3.new(1,1,1)
+    B_Title.Font = Enum.Font.GothamBold
+    B_Title.TextSize = 14
+    B_Title.TextXAlignment = Enum.TextXAlignment.Left
+    B_Title.TextTransparency = 0.05
+    
+    -- Descrição
+    local B_Desc = Instance.new("TextLabel", ButtonFrame)
+    B_Desc.Text = buttonConfig.Description or ""
+    B_Desc.Size = UDim2.new(1, -70, 0, 16)
+    B_Desc.Position = UDim2.new(0, 18, 0, 30)
+    B_Desc.BackgroundTransparency = 1
+    B_Desc.TextColor3 = Color3.fromRGB(160, 160, 160)
+    B_Desc.Font = Enum.Font.Gotham
+    B_Desc.TextSize = 11
+    B_Desc.TextXAlignment = Enum.TextXAlignment.Left
+    B_Desc.TextTransparency = 0.2
+    
+    -- Ícone de clique (direita)
+    local ClickIcon = Instance.new("ImageLabel", ButtonFrame)
+    ClickIcon.Size = UDim2.fromOffset(26, 26)
+    ClickIcon.Position = UDim2.new(1, -45, 0.5, -13)
+    ClickIcon.BackgroundTransparency = 1
+    ClickIcon.Image = "rbxassetid://95048685306752"  -- seu ícone
+    ClickIcon.ImageColor3 = Color_Theme
+    ClickIcon.ImageTransparency = 0.1
+    
+    -- Ripple effect (círculo que expande no clique)
+    local Ripple = Instance.new("Frame", ButtonFrame)
+    Ripple.Name = "Ripple"
+    Ripple.AnchorPoint = Vector2.new(0.5, 0.5)
+    Ripple.BackgroundColor3 = Color_Theme
+    Ripple.BackgroundTransparency = 0.6
+    Ripple.Size = UDim2.new(0, 0, 0, 0)
+    Ripple.Position = UDim2.new(0.5, 0, 0.5, 0)
+    Ripple.ZIndex = 10
+    local RippleCorner = Instance.new("UICorner", Ripple)
+    RippleCorner.CornerRadius = UDim.new(1, 0)
+    
+    -- Hover & Click animations
+    local hoverTweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+    local clickTweenInfo = TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    
+    -- Hover IN
+    ButtonFrame.MouseEnter:Connect(function()
+        TweenService:Create(ButtonFrame, hoverTweenInfo, {
+            Size = UDim2.new(1, -16, 0, 54),           -- leve aumento
+            BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        }):Play()
+        
+        TweenService:Create(Stroke, hoverTweenInfo, {Transparency = 0.3}):Play()
+        TweenService:Create(B_Title, hoverTweenInfo, {TextTransparency = 0}):Play()
+        TweenService:Create(B_Desc, hoverTweenInfo, {TextTransparency = 0.05}):Play()
+        TweenService:Create(ClickIcon, hoverTweenInfo, {
+            Size = UDim2.fromOffset(30, 30),
+            ImageTransparency = 0,
+            Rotation = 15
+        }):Play()
+    end)
+    
+    -- Hover OUT
+    ButtonFrame.MouseLeave:Connect(function()
+        TweenService:Create(ButtonFrame, hoverTweenInfo, {
+            Size = UDim2.new(1, -20, 0, 50),
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        }):Play()
+        
+        TweenService:Create(Stroke, hoverTweenInfo, {Transparency = 1}):Play()
+        TweenService:Create(B_Title, hoverTweenInfo, {TextTransparency = 0.05}):Play()
+        TweenService:Create(B_Desc, hoverTweenInfo, {TextTransparency = 0.2}):Play()
+        TweenService:Create(ClickIcon, hoverTweenInfo, {
+            Size = UDim2.fromOffset(26, 26),
+            ImageTransparency = 0.1,
+            Rotation = 0
+        }):Play()
+    end)
+    
+    -- Clique
+    ButtonFrame.MouseButton1Down:Connect(function(x, y)
+        -- Ripple effect
+        local rippleSize = math.max(ButtonFrame.AbsoluteSize.X, ButtonFrame.AbsoluteSize.Y) * 1.8
+        Ripple.Position = UDim2.new(0, x - ButtonFrame.AbsolutePosition.X, 0, y - ButtonFrame.AbsolutePosition.Y)
+        Ripple.Size = UDim2.new(0, 0, 0, 0)
+        Ripple.BackgroundTransparency = 0.4
+        
+        local rippleTween = TweenService:Create(Ripple, TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+            Size = UDim2.fromOffset(rippleSize, rippleSize),
+            BackgroundTransparency = 1
+        })
+        rippleTween:Play()
+        rippleTween.Completed:Connect(function()
+            Ripple.Size = UDim2.new(0,0,0,0)
+        end)
+        
+        -- Feedback visual no clique
+        TweenService:Create(ButtonFrame, clickTweenInfo, {BackgroundColor3 = Color_Theme:Lerp(Color3.fromRGB(20,20,20), 0.6)}):Play()
+        TweenService:Create(B_Title, TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut, 0, true), {TextSize = 15}):Play()
+    end)
+    
+    -- Clique solto + callback
+    ButtonFrame.MouseButton1Click:Connect(function()
+        task.spawn(Button.Callback)
+        
+        -- Animação de final de clique
+        TweenService:Create(ButtonFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quint), {
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        }):Play()
+    end)
+    
+    return Button
+end
 		-- === FUNÇÃO: ADD TOGGLE ===
 function Elements:AddToggle(tglCfg)
     Index = Index + 1
