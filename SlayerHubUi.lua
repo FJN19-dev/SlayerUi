@@ -1420,35 +1420,101 @@ function Library:CreateWindow(options)
 		PageLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 		PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-		-- Evento de Clique
-		TabButton.MouseButton1Click:Connect(function()
-			for _, child in pairs(Container:GetChildren()) do
-				if child:IsA("ScrollingFrame") then child.Visible = false end
-			end
-			for _, btn in pairs(TabScroll:GetChildren()) do
-				if btn:IsA("TextButton") then
-					btn.BackgroundColor3 = Color_Inactive
-					-- Reseta cores de todos os ícones e labels
-					local content = btn:FindFirstChild("Frame")
-					if content then
-						content.TextLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
-						content.ImageLabel.ImageColor3 = Color3.fromRGB(150, 150, 150)
-					end
-				end
-			end
-			Page.Visible = true
-			TabButton.BackgroundColor3 = Color_Theme
-			TabLabel.TextColor3 = Color3.new(1, 1, 1)
-			TabIcon.ImageColor3 = Color3.new(1, 1, 1)
-		end)
+		-- Função auxiliar para animação (mais curta e reutilizável)
+local function tween(obj, props, time)
+    time = time or 0.25
+    TweenService:Create(obj, TweenInfo.new(time, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), props):Play()
+end
 
-		if not Tabs.FirstTab then
-			Tabs.FirstTab = Page
-			Page.Visible = true
-			TabButton.BackgroundColor3 = Color_Theme
-			TabLabel.TextColor3 = Color3.new(1, 1, 1)
-			TabIcon.ImageColor3 = Color3.new(1, 1, 1)
-		end
+-- Evento de Clique
+TabButton.MouseButton1Click:Connect(function()
+    -- Desativa todas as páginas
+    for _, child in pairs(Container:GetChildren()) do
+        if child:IsA("ScrollingFrame") then
+            child.Visible = false
+        end
+    end
+
+    -- Desativa todos os botões + conteúdo interno (ícone e texto)
+    for _, btn in pairs(TabScroll:GetChildren()) do
+        if btn:IsA("TextButton") then
+            -- Anima fundo e texto do botão
+            tween(btn, {
+                BackgroundColor3 = Color_Inactive,
+                TextColor3 = Color3.fromRGB(150, 150, 150)
+            }, 0.25)
+
+            -- Reseta ícone e label dentro do Frame "content"
+            local content = btn:FindFirstChild("Frame")  -- ou o nome correto do frame
+            if content then
+                local txt = content:FindFirstChild("TextLabel")
+                local ico = content:FindFirstChild("ImageLabel")
+                
+                if txt then
+                    tween(txt, {TextColor3 = Color3.fromRGB(150, 150, 150)}, 0.25)
+                end
+                
+                if ico then
+                    tween(ico, {ImageColor3 = Color3.fromRGB(150, 150, 150)}, 0.25)
+                end
+            end
+
+            -- Esconde tracinho das outras abas
+            local ul = btn:FindFirstChild("Underline")
+            if ul then
+                tween(ul, {Size = UDim2.new(0, 0, 0, 3)}, 0.3)
+            end
+        end
+    end
+
+    -- Ativa a aba clicada
+    Page.Visible = true
+
+    -- Anima fundo e texto do botão ativo
+    tween(TabButton, {
+        BackgroundColor3 = Color_Theme,
+        TextColor3 = Color3.new(1, 1, 1)
+    }, 0.25)
+
+    -- Anima ícone e label da aba ativa
+    if TabLabel then
+        tween(TabLabel, {TextColor3 = Color3.new(1, 1, 1)}, 0.25)
+    end
+    if TabIcon then
+        tween(TabIcon, {ImageColor3 = Color3.new(1, 1, 1)}, 0.25)
+    end
+
+    -- Anima o tracinho roxo crescendo
+    if Underline then
+        tween(Underline, {
+            Size = UDim2.new(1, 0, 0, 3)   -- toda a largura (ou use 0.8,0 se preferir menor)
+        }, 0.35)
+    end
+end)
+
+-- Primeira aba (ativa com animação também)
+if not Tabs.FirstTab then
+    Tabs.FirstTab = Page
+    Page.Visible = true
+
+    tween(TabButton, {
+        BackgroundColor3 = Color_Theme,
+        TextColor3 = Color3.new(1, 1, 1)
+    }, 0.25)
+
+    if TabLabel then
+        tween(TabLabel, {TextColor3 = Color3.new(1, 1, 1)}, 0.25)
+    end
+    if TabIcon then
+        tween(TabIcon, {ImageColor3 = Color3.new(1, 1, 1)}, 0.25)
+    end
+
+    if Underline then
+        tween(Underline, {
+            Size = UDim2.new(1, 0, 0, 3)
+        }, 0.35)
+    end
+end
 
 		local Elements = {}
 
