@@ -1489,7 +1489,7 @@ function Tabs:AddTab(tabConfig)
 		tween(TabIcon, {ImageColor3 = Color3.new(1,1,1)}, 0.25)
 		tween(Underline, {Size = UDim2.new(1,0,0,3)}, 0.35)
   end
-				
+		local Index = 0	
 		local Elements = {}
 
 		-- === FUNÇÃO: ADD BUTTON (com animações premium) ===
