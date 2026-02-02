@@ -1705,165 +1705,267 @@ function Elements:AddToggle(tglCfg)
     return Toggle
 end
 
-		-- === FUNÇÃO: ADD DROPDOWN (MELHORADO) ===
 		function Elements:AddDropdown(name, dropConfig)
 			Index = Index + 1
+
+			local isMulti   = dropConfig.Multi == true
+			local default   = dropConfig.Default or (isMulti and {} or dropConfig.Values[1] or "")
+			local options   = dropConfig.Values or {}
+			local title     = dropConfig.Title or name
+			local desc      = dropConfig.Description or (isMulti and "Selecione opções..." or "Selecione uma opção")
+
 			local Dropdown = {
-				Value = dropConfig.Default or (dropConfig.Multi and {} or ""),
-				Options = dropConfig.Values or {},
+				Value    = default,
+				Options  = options,
 				Callback = function() end,
-				Opened = false
+				Opened   = false,
 			}
 
-			local DropdownFrame = Instance.new("Frame", Page)
+			-- ──────────────────────────────────────────────────────────────
+			--  Estrutura principal
+			-- ──────────────────────────────────────────────────────────────
+			local DropdownFrame = Instance.new("Frame")
 			DropdownFrame.Name = name .. "_Dropdown"
-			DropdownFrame.Size = UDim2.new(1, -20, 0, 45)
-			DropdownFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+			DropdownFrame.Parent = Page
+			DropdownFrame.Size = UDim2.new(1, -20, 0, 50)
+			DropdownFrame.BackgroundColor3 = Color3.fromRGB(28, 28, 32)
 			DropdownFrame.ClipsDescendants = true
 			DropdownFrame.LayoutOrder = Index
-			Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 8)
-			local Stroke = Instance.new("UIStroke", DropdownFrame)
-			Stroke.Color = Color3.fromRGB(45, 45, 45)
+
+			local corner = Instance.new("UICorner", DropdownFrame)
+			corner.CornerRadius = UDim.new(0, 10)
+
+			local stroke = Instance.new("UIStroke", DropdownFrame)
+			stroke.Color = Color3.fromRGB(48, 48, 55)
+			stroke.Thickness = 1.2
+			stroke.Transparency = 0.4
 
 			local DropButton = Instance.new("TextButton", DropdownFrame)
-			DropButton.Size = UDim2.new(1, 0, 0, 45)
+			DropButton.Size = UDim2.new(1, 0, 0, 50)
 			DropButton.BackgroundTransparency = 1
 			DropButton.Text = ""
+			DropButton.AutoButtonColor = false
 
+			-- Título
 			local D_Title = Instance.new("TextLabel", DropButton)
-			D_Title.Text = dropConfig.Title or name
-			D_Title.Size = UDim2.new(1, -65, 0, 20)
-			D_Title.Position = UDim2.new(0, 15, 0, 6)
-			D_Title.TextColor3 = Color3.new(1, 1, 1)
-			D_Title.Font = Enum.Font.GothamBold
-			D_Title.TextSize = 13
-			D_Title.TextXAlignment = Enum.TextXAlignment.Left
+			D_Title.Size = UDim2.new(1, -80, 0, 22)
+			D_Title.Position = UDim2.new(0, 16, 0, 6)
 			D_Title.BackgroundTransparency = 1
+			D_Title.Font = Enum.Font.GothamBold
+			D_Title.Text = title
+			D_Title.TextColor3 = Color3.new(1,1,1)
+			D_Title.TextSize = 14
+			D_Title.TextXAlignment = Enum.TextXAlignment.Left
+			D_Title.TextTruncate = Enum.TextTruncate.SplitWord
 
-			local D_DescLabel = Instance.new("TextLabel", DropButton)
-			D_DescLabel.Text = dropConfig.Description or "Selecione uma opção"
-			D_DescLabel.Size = UDim2.new(1, -65, 0, 15)
-			D_DescLabel.Position = UDim2.new(0, 15, 0, 22)
-			D_DescLabel.TextColor3 = Color_Theme
-			D_DescLabel.TextSize = 10
-			D_DescLabel.Font = Enum.Font.Gotham
-			D_DescLabel.TextXAlignment = Enum.TextXAlignment.Left
-			D_DescLabel.BackgroundTransparency = 1
+			-- Descrição / valor atual
+			local D_Value = Instance.new("TextLabel", DropButton)
+			D_Value.Name = "ValueLabel"
+			D_Value.Size = UDim2.new(1, -80, 0, 16)
+			D_Value.Position = UDim2.new(0, 16, 0, 28)
+			D_Value.BackgroundTransparency = 1
+			D_Value.Font = Enum.Font.Gotham
+			D_Value.Text = desc
+			D_Value.TextColor3 = Color3.fromRGB(160, 160, 175)
+			D_Value.TextSize = 11
+			D_Value.TextXAlignment = Enum.TextXAlignment.Left
+			D_Value.TextTruncate = Enum.TextTruncate.SplitWord
 
-			-- Novo Ícone solicitado
+			-- Ícone seta (melhor asset + cor mais agradável)
 			local DropdownIco = Instance.new("ImageLabel", DropButton)
-			DropdownIco.Image = "rbxassetid://10709790948"
-			DropdownIco.Size = UDim2.fromOffset(16, 16)
+			DropdownIco.Image = "rbxassetid://10709791437"   -- seta moderna / mais limpa
+			DropdownIco.Size = UDim2.fromOffset(20, 20)
 			DropdownIco.AnchorPoint = Vector2.new(1, 0.5)
-			DropdownIco.Position = UDim2.new(1, -12, 0.5, 0)
+			DropdownIco.Position = UDim2.new(1, -16, 0.5, 0)
 			DropdownIco.BackgroundTransparency = 1
-			DropdownIco.ImageColor3 = Color3.fromRGB(200, 200, 200)
+			DropdownIco.ImageColor3 = Color3.fromRGB(170, 170, 190)
+			DropdownIco.ResampleMode = Enum.ResamplerMode.Pixelated
 
+			-- Container das opções
 			local OptionHolder = Instance.new("ScrollingFrame", DropdownFrame)
-			OptionHolder.Position = UDim2.new(0, 0, 0, 45)
-			OptionHolder.Size = UDim2.new(1, 0, 1, -45)
+			OptionHolder.Position = UDim2.new(0, 0, 0, 50)
+			OptionHolder.Size = UDim2.new(1, 0, 1, -50)
 			OptionHolder.BackgroundTransparency = 1
 			OptionHolder.BorderSizePixel = 0
-			OptionHolder.ScrollBarThickness = 2
+			OptionHolder.ScrollBarThickness = 3
+			OptionHolder.ScrollBarImageColor3 = Color3.fromRGB(60, 60, 70)
+			OptionHolder.CanvasSize = UDim2.new()
 			OptionHolder.Visible = false
 
 			local UIList = Instance.new("UIListLayout", OptionHolder)
-			UIList.Padding = UDim.new(0, 3)
+			UIList.Padding = UDim.new(0, 4)
+			UIList.SortOrder = Enum.SortOrder.LayoutOrder
 
-			local function UpdateText()
-				if dropConfig.Multi then
+			local UIPadding = Instance.new("UIPadding", OptionHolder)
+			UIPadding.PaddingTop = UDim.new(0, 6)
+			UIPadding.PaddingBottom = UDim.new(0, 8)
+			UIPadding.PaddingLeft = UDim.new(0, 8)
+			UIPadding.PaddingRight = UDim.new(0, 8)
+
+			-- ──────────────────────────────────────────────────────────────
+			--  Funções auxiliares
+			-- ──────────────────────────────────────────────────────────────
+			local function formatValue()
+				if isMulti then
 					local selected = {}
-					for i, v in pairs(Dropdown.Value) do if v then table.insert(selected, i) end end
-					D_DescLabel.Text = #selected > 0 and table.concat(selected, ", ") or (dropConfig.Description or "Nenhum")
+					for opt, enabled in pairs(Dropdown.Value) do
+						if enabled then table.insert(selected, opt) end
+					end
+					if #selected == 0 then
+						D_Value.Text = desc
+					else
+						D_Value.Text = table.concat(selected, ", ")
+					end
 				else
-					D_DescLabel.Text = tostring(Dropdown.Value)
+					D_Value.Text = tostring(Dropdown.Value) or desc
 				end
 			end
 
-			for _, option in ipairs(Dropdown.Options) do
-				local OptBtn = Instance.new("TextButton", OptionHolder)
-				OptBtn.Size = UDim2.new(1, -10, 0, 32)
-				OptBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-				OptBtn.BackgroundTransparency = 1
-				OptBtn.Text = "      " .. tostring(option)
-				OptBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
-				OptBtn.TextXAlignment = Enum.TextXAlignment.Left
-				OptBtn.Font = Enum.Font.Gotham
-				OptBtn.TextSize = 12
-				OptBtn.AutoButtonColor = false
-				Instance.new("UICorner", OptBtn).CornerRadius = UDim.new(0, 6)
+			local tweenInfoOpen   = TweenInfo.new(0.42, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+			local tweenInfoClose  = TweenInfo.new(0.38, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+			local tweenInfoQuick  = TweenInfo.new(0.18, Enum.EasingStyle.Sine,  Enum.EasingDirection.Out)
 
-				-- Barra lateral de seleção (Efeito visual do código enviado)
+			local function updateDropdownSize()
+				local itemCount = math.min(#options, 10)   -- limite visual ~10 itens
+				local contentHeight = itemCount * 36 + 14   -- 36 = altura botão + padding
+				local targetH = Dropdown.Opened and (50 + contentHeight) or 50
+
+				TweenService:Create(DropdownFrame, Dropdown.Opened and tweenInfoOpen or tweenInfoClose, {
+					Size = UDim2.new(1, -20, 0, targetH)
+				}):Play()
+
+				TweenService:Create(DropdownIco, tweenInfoQuick, {
+					Rotation = Dropdown.Opened and 180 or 0,
+					ImageColor3 = Dropdown.Opened and Color_Theme or Color3.fromRGB(170,170,190)
+				}):Play()
+			end
+
+			-- ──────────────────────────────────────────────────────────────
+			--  Criação das opções
+			-- ──────────────────────────────────────────────────────────────
+			local buttons = {}
+
+			for i, option in ipairs(options) do
+				local OptBtn = Instance.new("TextButton")
+				OptBtn.Parent = OptionHolder
+				OptBtn.Size = UDim2.new(1, 0, 0, 32)
+				OptBtn.BackgroundColor3 = Color3.fromRGB(38, 38, 45)
+				OptBtn.BackgroundTransparency = 1
+				OptBtn.Text = "  " .. tostring(option)
+				OptBtn.TextColor3 = Color3.fromRGB(190, 190, 205)
+				OptBtn.Font = Enum.Font.GothamSemibold
+				OptBtn.TextSize = 13
+				OptBtn.TextXAlignment = Enum.TextXAlignment.Left
+				OptBtn.AutoButtonColor = false
+
+				local optCorner = Instance.new("UICorner", OptBtn)
+				optCorner.CornerRadius = UDim.new(0, 8)
+
 				local Selector = Instance.new("Frame", OptBtn)
-				Selector.Size = UDim2.fromOffset(4, 0)
-				Selector.Position = UDim2.new(0, 2, 0.5, 0)
+				Selector.Size = UDim2.fromOffset(4, 12)
+				Selector.Position = UDim2.new(0, 1, 0.5, 0)
 				Selector.AnchorPoint = Vector2.new(0, 0.5)
 				Selector.BackgroundColor3 = Color_Theme
+				Selector.BackgroundTransparency = 1
 				Selector.BorderSizePixel = 0
-				Instance.new("UICorner", Selector).CornerRadius = UDim.new(0, 2)
 
-				local function UpdateState()
-					local active = dropConfig.Multi and Dropdown.Value[option] or (Dropdown.Value == option)
-					local targetSize = active and UDim2.fromOffset(4, 16) or UDim2.fromOffset(4, 0)
-					local targetColor = active and Color_Theme or Color3.fromRGB(200, 200, 200)
+				local selCorner = Instance.new("UICorner", Selector)
+				selCorner.CornerRadius = UDim.new(1, 0)
 
-					TweenService:Create(Selector, TweenInfo.new(0.3, Enum.EasingStyle.Back), {Size = targetSize}):Play()
-					TweenService:Create(OptBtn, TweenInfo.new(0.2), {TextColor3 = targetColor}):Play()
+				local function updateVisual()
+					local active = isMulti and Dropdown.Value[option] or (Dropdown.Value == option)
+
+					TweenService:Create(Selector, tweenInfoQuick, {
+						Size = active and UDim2.fromOffset(4, 20) or UDim2.fromOffset(4, 0),
+						BackgroundTransparency = active and 0 or 0.4
+					}):Play()
+
+					TweenService:Create(OptBtn, tweenInfoQuick, {
+						TextColor3 = active and Color_Theme or Color3.fromRGB(190,190,205)
+					}):Play()
 				end
 
+				-- Hover
 				OptBtn.MouseEnter:Connect(function()
-					TweenService:Create(OptBtn, TweenInfo.new(0.2), {BackgroundTransparency = 0.92}):Play()
-				end)
-				OptBtn.MouseLeave:Connect(function()
-					TweenService:Create(OptBtn, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
+					TweenService:Create(OptBtn, tweenInfoQuick, {BackgroundTransparency = 0.88}):Play()
 				end)
 
+				OptBtn.MouseLeave:Connect(function()
+					TweenService:Create(OptBtn, tweenInfoQuick, {BackgroundTransparency = 1}):Play()
+				end)
+
+				-- Clique
 				OptBtn.MouseButton1Click:Connect(function()
-					if dropConfig.Multi then
+					if isMulti then
 						Dropdown.Value[option] = not Dropdown.Value[option]
 					else
 						Dropdown.Value = option
 						Dropdown.Opened = false
-						TweenService:Create(DropdownFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(1, -20, 0, 45)}):Play()
-						TweenService:Create(DropdownIco, TweenInfo.new(0.3), {Rotation = 0}):Play()
-						task.delay(0.4, function() OptionHolder.Visible = false end)
+						updateDropdownSize()
+						task.delay(0.4, function()
+							if not Dropdown.Opened then OptionHolder.Visible = false end
+						end)
 					end
 
-					UpdateText()
-					-- Atualiza visual de todos os botões (para limpar o rastro no Single)
-					for _, child in pairs(OptionHolder:GetChildren()) do
-						if child:IsA("TextButton") and child:FindFirstChild("UpdateState") then
-							child.UpdateState()
-						end
+					formatValue()
+					updateVisual()
+
+					-- Atualiza TODOS os visuais (importante no modo single)
+					for _, btn in ipairs(buttons) do
+						if btn.update then btn.update() end
 					end
-					UpdateState()
-					if Dropdown.Callback then Dropdown.Callback(Dropdown.Value) end
+
+					if Dropdown.Callback then
+						Dropdown.Callback(Dropdown.Value)
+					end
 				end)
 
-				local stateValue = Instance.new("BindableFunction", OptBtn)
-				stateValue.Name = "UpdateState"
-				stateValue.OnInvoke = UpdateState
-				UpdateState()
+				buttons[i] = { btn = OptBtn, update = updateVisual }
+				updateVisual()
 			end
 
+			-- Abre / Fecha dropdown
 			DropButton.MouseButton1Click:Connect(function()
 				Dropdown.Opened = not Dropdown.Opened
-				local listHeight = math.clamp(#Dropdown.Options * 35, 35, 200)
-				local targetSize = Dropdown.Opened and UDim2.new(1, -20, 0, 45 + listHeight) or UDim2.new(1, -20, 0, 45)
 
-				if Dropdown.Opened then OptionHolder.Visible = true end
+				if Dropdown.Opened then
+					OptionHolder.Visible = true
+					OptionHolder.CanvasPosition = Vector2.new(0,0)
+				end
 
-				-- Animação Suave "Quart" para o Frame e Rotação
-				TweenService:Create(DropdownFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = targetSize}):Play()
-				TweenService:Create(DropdownIco, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Rotation = Dropdown.Opened and 180 or 0}):Play()
+				updateDropdownSize()
 
 				if not Dropdown.Opened then
-					task.delay(0.5, function() if not Dropdown.Opened then OptionHolder.Visible = false end end)
+					task.delay(0.42, function()
+						if not Dropdown.Opened then OptionHolder.Visible = false end
+					end)
 				end
 			end)
 
-			function Dropdown:OnChanged(fn) Dropdown.Callback = fn end
-			UpdateText()
+			-- API
+			function Dropdown:OnChanged(fn)
+				Dropdown.Callback = fn
+				return Dropdown
+			end
+
+			function Dropdown:Set(value)
+				if isMulti then
+					if type(value) == "table" then
+						Dropdown.Value = value
+					end
+				else
+					if table.find(options, value) then
+						Dropdown.Value = value
+					end
+				end
+				formatValue()
+
+				for _, b in ipairs(buttons) do
+					if b.update then b.update() end
+				end
+			end
+
+			formatValue()           -- inicial
 			return Dropdown
 		end
 
