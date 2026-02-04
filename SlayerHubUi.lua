@@ -1,17 +1,13 @@
-
 local G2L = {};
-
 -- StarterGui.Slayer Hub
 G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
 G2L["1"]["Name"] = [[Slayer Hub]]
 G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling
 G2L["1"]["ResetOnSpawn"] = false
 
-
 -- StarterGui.Slayer Hub.Library
 G2L["2"] = Instance.new("ModuleScript", G2L["1"]);
 G2L["2"]["Name"] = [[Library]];
-
 
 -- StarterGui.Slayer Hub.Window
 G2L["3"] = Instance.new("Frame", G2L["1"]);
@@ -23,16 +19,13 @@ G2L["3"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["3"]["Name"] = [[Window]];
 G2L["3"]["BackgroundTransparency"] = 0.17;
 
-
 -- StarterGui.Slayer Hub.Window.Arrastavel
 G2L["4"] = Instance.new("LocalScript", G2L["3"]);
 G2L["4"]["Name"] = [[Arrastavel]];
 
-
 -- StarterGui.Slayer Hub.Window.UICorner
 G2L["5"] = Instance.new("UICorner", G2L["3"]);
 G2L["5"]["CornerRadius"] = UDim.new(0, 6);
-
 
 -- StarterGui.Slayer Hub.Window.Imagem
 G2L["6"] = Instance.new("ImageLabel", G2L["3"]);
@@ -46,7 +39,6 @@ G2L["6"]["BackgroundTransparency"] = 1;
 G2L["6"]["Name"] = [[Imagem]];
 G2L["6"]["Position"] = UDim2.new(0.29073, 0, 0.27422, 0);
 
-
 -- StarterGui.Slayer Hub.Window.barrinha
 G2L["7"] = Instance.new("Frame", G2L["3"]);
 G2L["7"]["BorderSizePixel"] = 0;
@@ -57,10 +49,9 @@ G2L["7"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["7"]["Name"] = [[barrinha]];
 G2L["7"]["BackgroundTransparency"] = 0.19;
 
-
 -- StarterGui.Slayer Hub.Window.Title
 G2L["8"] = Instance.new("TextLabel", G2L["3"]);
-G2L["8"]["TextStrokeTransparency"] = 100;
+G2L["8"]["TextStrokeTransparency"] = 1;  -- corrigido (100 → 1.0)
 G2L["8"]["TextTruncate"] = Enum.TextTruncate.AtEnd;
 G2L["8"]["BorderSizePixel"] = 0;
 G2L["8"]["TextSize"] = 17;
@@ -69,13 +60,12 @@ G2L["8"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
 G2L["8"]["FontFace"] = Font.new([[rbxasset://fonts/families/Arial.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
 G2L["8"]["TextColor3"] = Color3.fromRGB(171, 0, 255);
 G2L["8"]["BackgroundTransparency"] = 1;
-G2L["8"]["OpenTypeFeatures"] = [[Slayer Hub X]];
 G2L["8"]["Size"] = UDim2.new(0, 172, 0, 50);
 G2L["8"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["8"]["Text"] = [[Slayer Hub X]];
 G2L["8"]["Name"] = [[Title]];
 G2L["8"]["Position"] = UDim2.new(-0.01122, 0, 0, 0);
-
+G2L["8"]["AutoLocalize"] = false;  -- ← impede tradução
 
 -- StarterGui.Slayer Hub.Window.Folder
 G2L["9"] = Instance.new("TextLabel", G2L["3"]);
@@ -87,10 +77,10 @@ G2L["9"]["TextColor3"] = Color3.fromRGB(171, 0, 255);
 G2L["9"]["BackgroundTransparency"] = 1;
 G2L["9"]["Size"] = UDim2.new(0, 348, 0, 38);
 G2L["9"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["9"]["Text"] = [[[v1.1.1] [discord.gg/NJJ7BYgWcd]];
+G2L["9"]["Text"] = [[[v1.1.1] [discord.gg/NJJ7BYgWcd]]];
 G2L["9"]["Name"] = [[Folder]];
 G2L["9"]["Position"] = UDim2.new(0.08594, 0, 0.01413, 0);
-
+G2L["9"]["AutoLocalize"] = false;  -- ← impede tradução
 
 -- StarterGui.Slayer Hub.Window.Fechar
 G2L["a"] = Instance.new("TextButton", G2L["3"]);
@@ -107,12 +97,10 @@ G2L["a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["a"]["Text"] = [[X]];
 G2L["a"]["Name"] = [[Fechar]];
 G2L["a"]["Position"] = UDim2.new(1.12346, 0, -0.01939, 0);
-
+G2L["a"]["AutoLocalize"] = false;  -- impede tradução do "X" (embora raro, previne bugs)
 
 -- StarterGui.Slayer Hub.Window.Fechar.LocalScript
 G2L["b"] = Instance.new("LocalScript", G2L["a"]);
-
-
 
 -- StarterGui.Slayer Hub.Window.Minimizar
 G2L["c"] = Instance.new("ImageButton", G2L["3"]);
@@ -125,13 +113,10 @@ G2L["c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["c"]["Name"] = [[Minimizar]];
 G2L["c"]["Position"] = UDim2.new(0.90064, 0, 0.00563, 0);
 
-
 -- StarterGui.Slayer Hub.Window.Minimizar.LocalScript
 G2L["d"] = Instance.new("LocalScript", G2L["c"]);
 
-
-
--- StarterGui.Slayer Hub.Window.Close
+-- StarterGui.Slayer Hub.Window.Close (popup de confirmação)
 G2L["e"] = Instance.new("Frame", G2L["3"]);
 G2L["e"]["Visible"] = false;
 G2L["e"]["BorderSizePixel"] = 0;
@@ -142,16 +127,12 @@ G2L["e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["e"]["Name"] = [[Close]];
 G2L["e"]["BackgroundTransparency"] = 0.2;
 
-
 -- StarterGui.Slayer Hub.Window.Close.LocalScript
 G2L["f"] = Instance.new("LocalScript", G2L["e"]);
-
-
 
 -- StarterGui.Slayer Hub.Window.Close.UICorner
 G2L["10"] = Instance.new("UICorner", G2L["e"]);
 G2L["10"]["CornerRadius"] = UDim.new(0, 6);
-
 
 -- StarterGui.Slayer Hub.Window.Close.Yes
 G2L["11"] = Instance.new("TextButton", G2L["e"]);
@@ -166,19 +147,15 @@ G2L["11"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["11"]["Text"] = [[Yes]];
 G2L["11"]["Name"] = [[Yes]];
 G2L["11"]["Position"] = UDim2.new(0.05109, 0, 0.58065, 0);
-
+G2L["11"]["AutoLocalize"] = false;  -- impede "Yes" virar "Sim"
 
 -- StarterGui.Slayer Hub.Window.Close.Yes.LocalScript
 G2L["12"] = Instance.new("LocalScript", G2L["11"]);
 
-
-
 -- StarterGui.Slayer Hub.Window.Close.Yes.UICorner
 G2L["13"] = Instance.new("UICorner", G2L["11"]);
 
-
-
--- StarterGui.Slayer Hub.Window.Close.Yes.TextLabel
+-- StarterGui.Slayer Hub.Window.Close.Yes.TextLabel (o "Close" dentro do botão Yes)
 G2L["14"] = Instance.new("TextLabel", G2L["11"]);
 G2L["14"]["BorderSizePixel"] = 0;
 G2L["14"]["TextSize"] = 20;
@@ -190,7 +167,7 @@ G2L["14"]["Size"] = UDim2.new(0, 200, 0, 50);
 G2L["14"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["14"]["Text"] = [[Close]];
 G2L["14"]["Position"] = UDim2.new(-0.56303, 0, -1.86, 0);
-
+G2L["14"]["AutoLocalize"] = false;  -- impede tradução do "Close" interno
 
 -- StarterGui.Slayer Hub.Window.Close.Cancelar
 G2L["15"] = Instance.new("TextButton", G2L["e"]);
@@ -206,19 +183,15 @@ G2L["15"]["BorderColor3"] = Color3.fromRGB(255, 255, 255);
 G2L["15"]["Text"] = [[Cancelar]];
 G2L["15"]["Name"] = [[Cancelar]];
 G2L["15"]["Position"] = UDim2.new(0.5365, 0, 0.58065, 0);
-
+G2L["15"]["AutoLocalize"] = false;  -- impede "Cancelar" ser alterado/traduzido
 
 -- StarterGui.Slayer Hub.Window.Close.Cancelar.LocalScript
 G2L["16"] = Instance.new("LocalScript", G2L["15"]);
 
-
-
 -- StarterGui.Slayer Hub.Window.Close.Cancelar.UICorner
 G2L["17"] = Instance.new("UICorner", G2L["15"]);
 
-
-
--- StarterGui.Slayer Hub.Window.Close.TextLabel
+-- StarterGui.Slayer Hub.Window.Close.TextLabel (pergunta principal do popup)
 G2L["18"] = Instance.new("TextLabel", G2L["e"]);
 G2L["18"]["BorderSizePixel"] = 0;
 G2L["18"]["TextSize"] = 19;
@@ -230,15 +203,12 @@ G2L["18"]["Size"] = UDim2.new(0, 200, 0, 55);
 G2L["18"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["18"]["Text"] = [[Do you want to close the UI?]];
 G2L["18"]["Position"] = UDim2.new(0.05109, 0, 0.11613, 0);
-
-
+G2L["18"]["AutoLocalize"] = false;  -- IMPEDIR TRADUÇÃO AUTOMÁTICA DA FRASE INTEIRA
 -- StarterGui.Slayer Hub.Window.Close.UIStroke
 G2L["19"] = Instance.new("UIStroke", G2L["e"]);
 G2L["19"]["Thickness"] = 2;
 G2L["19"]["Color"] = Color3.fromRGB(171, 0, 255);
 G2L["19"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
-
-
 -- StarterGui.Slayer Hub.Window.SideBar
 G2L["1a"] = Instance.new("Frame", G2L["3"]);
 G2L["1a"]["BorderSizePixel"] = 0;
@@ -248,8 +218,6 @@ G2L["1a"]["Position"] = UDim2.new(0, 0, 0.11939, 0);
 G2L["1a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["1a"]["Name"] = [[SideBar]];
 G2L["1a"]["BackgroundTransparency"] = 0.58;
-
-
 -- StarterGui.Slayer Hub.Window.SideBar.Container
 G2L["1b"] = Instance.new("Frame", G2L["1a"]);
 G2L["1b"]["BorderSizePixel"] = 0;
@@ -259,8 +227,6 @@ G2L["1b"]["Position"] = UDim2.new(0.00629, 0, 0, 0);
 G2L["1b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["1b"]["Name"] = [[Container]];
 G2L["1b"]["BackgroundTransparency"] = 1;
-
-
 -- StarterGui.Slayer Hub.Bolinha
 G2L["1c"] = Instance.new("ImageButton", G2L["1"]);
 G2L["1c"]["BorderSizePixel"] = 0;
@@ -270,17 +236,11 @@ G2L["1c"]["Size"] = UDim2.new(0, 49, 0, 44);
 G2L["1c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["1c"]["Name"] = [[Bolinha]];
 G2L["1c"]["Position"] = UDim2.new(0.04658, 0, 0.12298, 0);
-
-
 -- StarterGui.Slayer Hub.Bolinha.LocalScript
 G2L["1d"] = Instance.new("LocalScript", G2L["1c"]);
-
-
-
 -- StarterGui.Slayer Hub.Bolinha.UICorner
 G2L["1e"] = Instance.new("UICorner", G2L["1c"]);
 G2L["1e"]["CornerRadius"] = UDim.new(0, 90);
-
 
 -- Require G2L wrapper
 local G2L_REQUIRE = require;
@@ -298,12 +258,62 @@ local function require(Module:ModuleScript)
 end
 
 G2L_MODULES[G2L["2"]] = {
-Closure = function()
-    local script = G2L["2"];local Library = {Objects = {},}
-local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-
--- 1. TABELA DE ÍCONES (LUCIDE)
+    Closure = function()
+        local script = G2L["2"];
+        
+        -- Desativa AutoLocalize em todos os textos da GUI
+        local function DesativarTraduçãoAuto(gui)
+            if not gui or not gui:IsDescendantOf(game) then return end
+            for _, obj in ipairs(gui:GetDescendants()) do
+                if (obj:IsA("TextLabel") or obj:IsA("TextButton") or obj:IsA("TextBox")) then
+                    obj.AutoLocalize = false
+                end
+            end
+            -- Opcional: desativa também no próprio parent (se for TextButton/TextLabel)
+            if gui:IsA("TextLabel") or gui:IsA("TextButton") or gui:IsA("TextBox") then
+                gui.AutoLocalize = false
+            end
+        end
+        
+        -- Executa logo após a GUI estar disponível
+        task.defer(function()
+            local player = game.Players.LocalPlayer
+            local playerGui = player:WaitForChild("PlayerGui", 10)  -- espera até 10 segundos se necessário
+            
+            -- Tenta encontrar a GUI imediatamente e também monitora adições futuras
+            local function TryDisable()
+                local slayerHub = playerGui:FindFirstChild("Slayer Hub")
+                if slayerHub then
+                    DesativarTraduçãoAuto(slayerHub)
+                end
+            end
+            
+            TryDisable()  -- tenta agora
+            
+            -- Monitora se a GUI for adicionada depois (caso o script rode antes)
+            local connection
+            connection = playerGui.ChildAdded:Connect(function(child)
+                if child.Name == "Slayer Hub" then
+                    TryDisable()
+                    connection:Disconnect()  -- desconecta após encontrar
+                end
+            end)
+            
+            -- Limpeza opcional (desconecta se o jogador sair)
+            playerGui.AncestryChanged:Connect(function()
+                if not playerGui:IsDescendantOf(game) then
+                    connection:Disconnect()
+                end
+            end)
+        end)
+        
+        -- Continua o código da Library normalmente
+        local Library = {Objects = {},}
+        local TweenService = game:GetService("TweenService")
+        local UserInputService = game:GetService("UserInputService")
+        
+        
+        -- 1. TABELA DE ÍCONES (LUCIDE)
 local Lucide = {
 	["lucide-accessibility"] = "rbxassetid://10709751939",
 	["lucide-activity"] = "rbxassetid://10709752035",
@@ -1170,43 +1180,47 @@ function Library:Notify(config)
 	Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
 	local T_Title = Instance.new("TextLabel", NotifFrame)
-	T_Title.Text = Title
-	T_Title.Size = UDim2.new(1, -40, 0, 25)
-	T_Title.Position = UDim2.fromOffset(12, 5)
-	T_Title.TextColor3 = Color3.fromRGB(200, 200, 200)
-	T_Title.Font = Enum.Font.Gotham
-	T_Title.TextSize = 13
-	T_Title.TextXAlignment = Enum.TextXAlignment.Left
-	T_Title.BackgroundTransparency = 1
+T_Title.Text = Title
+T_Title.Size = UDim2.new(1, -40, 0, 25)
+T_Title.Position = UDim2.fromOffset(12, 5)
+T_Title.TextColor3 = Color3.fromRGB(200, 200, 200)
+T_Title.Font = Enum.Font.Gotham
+T_Title.TextSize = 13
+T_Title.TextXAlignment = Enum.TextXAlignment.Left
+T_Title.BackgroundTransparency = 1
+T_Title.AutoLocalize = false  -- ← impede tradução do título
 
-	local CloseBtn = Instance.new("TextButton", NotifFrame)
-	CloseBtn.Text = "X"
-	CloseBtn.Size = UDim2.fromOffset(20, 25)
-	CloseBtn.Position = UDim2.new(1, -30, 0, 5)
-	CloseBtn.BackgroundTransparency = 1
-	CloseBtn.TextColor3 = Color3.fromRGB(150, 150, 150)
-	CloseBtn.TextSize = 20
-	CloseBtn.Font = Enum.Font.Gotham
+local CloseBtn = Instance.new("TextButton", NotifFrame)
+CloseBtn.Text = "X"
+CloseBtn.Size = UDim2.fromOffset(20, 25)
+CloseBtn.Position = UDim2.new(1, -30, 0, 5)
+CloseBtn.BackgroundTransparency = 1
+CloseBtn.TextColor3 = Color3.fromRGB(150, 150, 150)
+CloseBtn.TextSize = 20
+CloseBtn.Font = Enum.Font.Gotham
+CloseBtn.AutoLocalize = false  -- ← impede qualquer alteração no "X"
 
-	local C_Label = Instance.new("TextLabel", NotifFrame)
-	C_Label.Text = Content
-	C_Label.Size = UDim2.new(1, -24, 0, 18)
-	C_Label.Position = UDim2.fromOffset(12, 30)
-	C_Label.TextColor3 = Color3.new(1, 1, 1)
-	C_Label.Font = Enum.Font.GothamBold
-	C_Label.TextSize = 14
-	C_Label.TextXAlignment = Enum.TextXAlignment.Left
-	C_Label.BackgroundTransparency = 1
+local C_Label = Instance.new("TextLabel", NotifFrame)
+C_Label.Text = Content
+C_Label.Size = UDim2.new(1, -24, 0, 18)
+C_Label.Position = UDim2.fromOffset(12, 30)
+C_Label.TextColor3 = Color3.new(1, 1, 1)
+C_Label.Font = Enum.Font.GothamBold
+C_Label.TextSize = 14
+C_Label.TextXAlignment = Enum.TextXAlignment.Left
+C_Label.BackgroundTransparency = 1
+C_Label.AutoLocalize = false  -- ← protege o conteúdo principal
 
-	local S_Label = Instance.new("TextLabel", NotifFrame)
-	S_Label.Text = SubContent
-	S_Label.Size = UDim2.new(1, -24, 0, 15)
-	S_Label.Position = UDim2.fromOffset(12, 48)
-	S_Label.TextColor3 = Color3.fromRGB(160, 160, 160)
-	S_Label.Font = Enum.Font.Gotham
-	S_Label.TextSize = 12
-	S_Label.TextXAlignment = Enum.TextXAlignment.Left
-	S_Label.BackgroundTransparency = 1
+local S_Label = Instance.new("TextLabel", NotifFrame)
+S_Label.Text = SubContent
+S_Label.Size = UDim2.new(1, -24, 0, 15)
+S_Label.Position = UDim2.fromOffset(12, 48)
+S_Label.TextColor3 = Color3.fromRGB(160, 160, 160)
+S_Label.Font = Enum.Font.Gotham
+S_Label.TextSize = 12
+S_Label.TextXAlignment = Enum.TextXAlignment.Left
+S_Label.BackgroundTransparency = 1
+S_Label.AutoLocalize = false  -- ← protege o subtexto
 
 	local TimerBackground = Instance.new("Frame", NotifFrame)
 	TimerBackground.Size = UDim2.new(1, -24, 0, 3)
@@ -1343,6 +1357,7 @@ function Library:CreateWindow(options)
 	UserName.TextSize = 11
 	UserName.TextXAlignment = Enum.TextXAlignment.Left
 	UserName.BackgroundTransparency = 1
+	UserName.AutoLocalize = false
 
 	local UserTag = Instance.new("TextLabel", UserProfile)
 	UserTag.Text = "@" .. Player.Name
@@ -1353,6 +1368,7 @@ function Library:CreateWindow(options)
 	UserTag.TextSize = 8
 	UserTag.TextXAlignment = Enum.TextXAlignment.Left
 	UserTag.BackgroundTransparency = 1
+	UserTag.AutoLocalize = false
 
 	local Container = Window:FindFirstChild("Container") or Instance.new("Frame", Window)
 	Container.Name = "Container"
@@ -1381,6 +1397,7 @@ function Tabs:AddTab(tabConfig)
 	TabButton.Text = ""
 	TabButton.BackgroundColor3 = Color_Inactive
 	TabButton.AutoButtonColor = false
+	TabButton.AutoLocalize = false
 	Instance.new("UICorner", TabButton).CornerRadius = UDim.new(0, 6)
 
 	-- CONTEÚDO (ÍCONE + TEXTO)
@@ -1409,6 +1426,7 @@ function Tabs:AddTab(tabConfig)
 	TabLabel.TextSize = 13
 	TabLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
 	TabLabel.BackgroundTransparency = 1
+	TabLabel.AutoLocalize = false
 
 	TabLabel.Size = TabIcon.Visible and UDim2.new(1, -35, 1, 0) or UDim2.new(1, 0, 1, 0)
 	TabLabel.Position = TabIcon.Visible and UDim2.new(0, 35, 0, 0) or UDim2.new(0, 0, 0, 0)
@@ -1507,6 +1525,7 @@ function Elements:AddButton(buttonConfig)
     ButtonFrame.AutoButtonColor = false
     ButtonFrame.LayoutOrder = Index
     ButtonFrame.ClipsDescendants = true
+	ButtonFrame.AutoLocalize = false
     
     local UICorner = Instance.new("UICorner", ButtonFrame)
     UICorner.CornerRadius = UDim.new(0, 12)
@@ -1536,6 +1555,7 @@ function Elements:AddButton(buttonConfig)
     B_Title.TextSize = 14
     B_Title.TextXAlignment = Enum.TextXAlignment.Left
     B_Title.TextTransparency = 0.05
+	B_Title.AutoLocalize = false
     
     -- Descrição
     local B_Desc = Instance.new("TextLabel", ButtonFrame)
@@ -1548,6 +1568,7 @@ function Elements:AddButton(buttonConfig)
     B_Desc.TextSize = 11
     B_Desc.TextXAlignment = Enum.TextXAlignment.Left
     B_Desc.TextTransparency = 0.2
+	B_Desc.AutoLocalize = false
     
     -- Ícone de clique (direita)
     local ClickIcon = Instance.new("ImageLabel", ButtonFrame)
