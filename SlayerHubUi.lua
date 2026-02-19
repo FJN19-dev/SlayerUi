@@ -1706,20 +1706,37 @@ function Elements:AddToggle(tglCfg)
 end
 
 		function Elements:AddDropdown(name, dropConfig)
-			Index = Index + 1
+	Index = Index + 1
 
-			local isMulti   = dropConfig.Multi == true
-			local default   = dropConfig.Default or (isMulti and {} or dropConfig.Values[1] or "")
-			local options   = dropConfig.Values or {}
-			local title     = dropConfig.Title or name
-			local desc      = dropConfig.Description or (isMulti and "Selecione opções..." or "Selecione uma opção")
+	dropConfig = dropConfig or {}
+	local isMulti = dropConfig.Multi == true
 
-			local Dropdown = {
-				Value    = default,
-				Options  = options,
-				Callback = function() end,
-				Opened   = false,
-			}
+	local options = dropConfig.Values
+	if type(options) ~= "table" then
+		options = {}
+	end
+
+	local default
+	if isMulti then
+		default = type(dropConfig.Default) == "table" and dropConfig.Default or {}
+	else
+		if dropConfig.Default and table.find(options, dropConfig.Default) then
+			default = dropConfig.Default
+		else
+			default = options[1] or nil
+		end
+	end
+
+	local title = dropConfig.Title or name
+	local desc = dropConfig.Description or (isMulti and "Selecione opções..." or "Selecione uma opção")
+
+	local Dropdown = {
+		Value = default,
+		Options = options,
+		Callback = function() end,
+		Opened = false,
+	}
+
 
 			-- ──────────────────────────────────────────────────────────────
 			--  Estrutura principal
@@ -1806,20 +1823,33 @@ end
 			--  Funções auxiliares
 			-- ──────────────────────────────────────────────────────────────
 			local function formatValue()
-				if isMulti then
-					local selected = {}
-					for opt, enabled in pairs(Dropdown.Value) do
-						if enabled then table.insert(selected, opt) end
-					end
-					if #selected == 0 then
-						D_Value.Text = desc
-					else
-						D_Value.Text = table.concat(selected, ", ")
-					end
-				else
-					D_Value.Text = tostring(Dropdown.Value) or desc
-				end
+	if isMulti then
+		local selected = {}
+
+		if type(Dropdown.Value) ~= "table" then
+			Dropdown.Value = {}
+		end
+
+		for opt, enabled in pairs(Dropdown.Value) do
+			if enabled then
+				table.insert(selected, opt)
 			end
+		end
+
+		if #selected == 0 then
+			D_Value.Text = desc
+		else
+			D_Value.Text = table.concat(selected, ", ")
+		end
+	else
+		if Dropdown.Value then
+			D_Value.Text = tostring(Dropdown.Value)
+		else
+			D_Value.Text = desc
+		end
+	end
+end
+
 
 			local tweenInfoOpen   = TweenInfo.new(0.42, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
 			local tweenInfoClose  = TweenInfo.new(0.38, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
